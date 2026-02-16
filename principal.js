@@ -55,7 +55,22 @@ const controles = {
     dash: false
 };
 
+// Variable para controlar si los controles táctiles están activos
+let controlesTactilesActivos = true;
+
 window.addEventListener("keydown", (e) => {
+    // Tecla 'T' para alternar controles táctiles
+    if (e.key === "t" || e.key === "T") {
+        controlesTactilesActivos = !controlesTactilesActivos;
+        if (controlesTactilesActivos) {
+            nivel.configurarControlesTactiles(controles);
+        } else {
+            nivel.desactivarControlesTactiles();
+        }
+        console.log(`Controles táctiles: ${controlesTactilesActivos ? "Activados" : "Desactivados"}`);
+        return;
+    }
+
     if (e.key === "ArrowLeft" || e.key === "a") controles.izquierda = true;
     if (e.key === "ArrowRight" || e.key === "d") controles.derecha = true;
     if (e.key === "ArrowUp" || e.key === "w" || e.key === " ") controles.salto = true;
