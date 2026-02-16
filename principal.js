@@ -66,6 +66,7 @@ window.addEventListener("keyup", (e) => {
     if (e.key === "ArrowLeft" || e.key === "a") controles.izquierda = false;
     if (e.key === "ArrowRight" || e.key === "d") controles.derecha = false;
     if (e.key === "ArrowUp" || e.key === "w" || e.key === " ") controles.salto = false;
+    if (e.key === "Shift" || e.key === "k") controles.dash = false;
 });
 
 window.addEventListener("blur", () => {
