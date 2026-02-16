@@ -125,7 +125,6 @@ eliminarDeCuadricula(objeto) {
   const limSuperior = camara ? camara.y - margen : -Infinity;
   const limInferior = camara ? camara.y + camara.alto + margen : Infinity;
 
-  // Dibujar sólidos (bloques)
   for (const o of this.solidos) {
     if (!camara || (
       o.x + o.ancho > limIzquierdo &&
@@ -137,7 +136,6 @@ eliminarDeCuadricula(objeto) {
     }
   }
   
-  // Dibujar otros objetos (monedas)
   for (const o of this.otros) {
     if (!camara || (
       o.x + o.ancho > limIzquierdo &&
