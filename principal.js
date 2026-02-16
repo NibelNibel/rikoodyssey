@@ -55,11 +55,11 @@ const controles = {
     dash: false
 };
 
-// Variable para controlar si los controles táctiles están activos
+
 let controlesTactilesActivos = true;
 
 window.addEventListener("keydown", (e) => {
-    // Tecla 'T' para alternar controles táctiles
+    
     if (e.key === "t" || e.key === "T") {
         controlesTactilesActivos = !controlesTactilesActivos;
         if (controlesTactilesActivos) {
