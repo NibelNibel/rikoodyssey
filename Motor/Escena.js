@@ -8,7 +8,7 @@ export class Escena {
   }
 
   async cargar() {
-    // Método que debe ser sobrescrito por las escenas hijas
+    
   }
 
   actualizar(dt, entrada) {}
@@ -18,10 +18,8 @@ export class Escena {
   
   renderizador.comenzar(this.camara);
   
-  // Pasamos la cámara al mundo aquí
   this.mundo?.dibujar(renderizador, this.camara); 
   
-  // También podrías aplicar culling a las entidades si tuvieras cientos
   this.entidades.forEach(e => e.dibujar?.(renderizador));
   
   renderizador.terminar();
