@@ -118,8 +118,6 @@ eliminarDeCuadricula(objeto) {
   }
 
   dibujar(renderizador, camara) {
-  // Nota: La cámara ya está aplicada en el contexto cuando llegamos aquí
-  // Solo necesitamos filtrar por visibilidad
   
   const margen = 100;
   const limIzquierdo = camara ? camara.x - margen : -Infinity;
