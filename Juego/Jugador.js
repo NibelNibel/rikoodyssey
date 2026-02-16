@@ -39,7 +39,7 @@ export class Jugador extends Entidad {
     this.distanciaCaida = 0;
     this.umbralCaida = 201;
 
-    // Temporizador para el estado golpe_cabeza
+
     this.tiempoGolpe = 0;
     this.duracionGolpe = 0.3;
 
@@ -52,18 +52,18 @@ export class Jugador extends Entidad {
     }
     console.log(this.Audios);
 
-    // Sistema de partículas para polvo
+    
     this.particulas = [];
   }
 
   generarPolvoSalto() {
-    const cantidad = 8 + Math.floor(Math.random() * 4); // entre 8 y 12
+    const cantidad = 8 + Math.floor(Math.random() * 4); 
     for (let i = 0; i < cantidad; i++) {
       this.particulas.push({
         x: this.x + this.ancho / 2 + (Math.random() - 0.5) * 30,
-        y: this.y + this.alto - 5, // justo en la base del personaje
+        y: this.y + this.alto - 5, 
         vx: (Math.random() - 0.5) * 100,
-        vy: -Math.random() * 150 - 50, // velocidad hacia arriba
+        vy: -Math.random() * 150 - 50, 
         vida: 0.5 + Math.random() * 0.5,
         tam: 3 + Math.random() * 4,
         color: `rgba(200, 200, 200, ${0.6 + Math.random() * 0.3})`
@@ -75,7 +75,7 @@ export class Jugador extends Entidad {
     this.animador.actualizar(dt);
     const ahora = Date.now();
 
-    // Actualizar temporizador de golpe
+  
     if (this.tiempoGolpe > 0) {
       this.tiempoGolpe -= dt;
     }
@@ -155,7 +155,7 @@ export class Jugador extends Entidad {
           this.Audios[1].currentTime = 0;
           this.Audios[1].play();
           this.estado = "golpe_cabeza";
-          this.tiempoGolpe = this.duracionGolpe; // Iniciar temporizador
+          this.tiempoGolpe = this.duracionGolpe;
           this.vx *= -0.4;
           this.estaDasheando = false;
         } else {
@@ -163,7 +163,7 @@ export class Jugador extends Entidad {
         }
       }
 
-      // --- EJE Y ---
+    
       const velocidadImpactoY = this.vy;
       const deltaY = this.vy * sdt;
       this.y += deltaY;
@@ -176,13 +176,13 @@ export class Jugador extends Entidad {
           this.Audios[1].currentTime = 0;
           this.Audios[1].play();
           this.estado = "golpe_cabeza";
-          this.tiempoGolpe = this.duracionGolpe; // Iniciar temporizador
+          this.tiempoGolpe = this.duracionGolpe;
         }
         this.vy = 0;
       }
     }
 
-    // --- Check suelo ---
+  
     this.y += 1;
     this.enSuelo = mundo.colisionar(this, "y", 1) !== null;
     this.y -= 1;
@@ -192,18 +192,18 @@ export class Jugador extends Entidad {
       this.distanciaCaida += this.vy * dt;
     }
 
-    // --- Lógica de cambio de estado (solo si no está en golpe o el temporizador ya terminó) ---
+  
     if (this.tiempoGolpe <= 0) {
-      // Salto
+  
       if (controles.salto && this.enSuelo) {
         this.vy = this.fuerzaSalto;
         console.log(this.vy);
         this.enSuelo = false;
         this.estado = "saltando";
-        this.generarPolvoSalto(); // Generar partículas al saltar
+        this.generarPolvoSalto();
       }
 
-      // Estados en suelo
+  
       if (this.enSuelo) {
         this.tiempoCayendo = 0;
 
@@ -234,12 +234,11 @@ export class Jugador extends Entidad {
       }
     }
 
-    // Actualizar partículas (siempre, independientemente del estado)
     for (let i = this.particulas.length - 1; i >= 0; i--) {
       const p = this.particulas[i];
       p.x += p.vx * dt;
       p.y += p.vy * dt;
-      p.vy += 200 * dt; // gravedad suave para que caigan
+      p.vy += 200 * dt;
       p.vida -= dt;
       if (p.vida <= 0) {
         this.particulas.splice(i, 1);
@@ -276,7 +275,7 @@ export class Jugador extends Entidad {
       200
     );
 
-    // Dibujar partículas de polvo
+  
     for (let p of this.particulas) {
       renderizador.rectangulo(
         Math.floor(p.x - p.tam / 2),
