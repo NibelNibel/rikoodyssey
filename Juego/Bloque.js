@@ -13,7 +13,7 @@ export class Bloque {
   renderizador.rectangulo(this.x, this.y, this.ancho, this.alto, "rgb(180,180,180)");
 
   renderizador.contexto.strokeStyle = "#22223b";
-  renderizador.contexto.lineWidth = 0;
+  renderizador.contexto.lineWidth = 1;
   renderizador.contexto.strokeRect(this.x, this.y, this.ancho, this.alto);
 }
 }
