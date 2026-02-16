@@ -10,7 +10,7 @@ export class Renderizador {
   comenzar(camara) {
     this.contexto.save();
     if (camara) {
-      // 🔥 REDONDEAMOS LA CÁMARA AQUÍ – FIN DEL TEMBLOR 🔥
+
       this.contexto.translate(
         Math.round(-camara.x),
         Math.round(-camara.y)
@@ -19,7 +19,7 @@ export class Renderizador {
   }
 
   dibujarImagen(imagen, x, y, ancho, alto) {
-    // También puedes redondear aquí por si acaso (opcional pero recomendado)
+
     this.contexto.drawImage(
       imagen,
       Math.round(x),
@@ -39,7 +39,6 @@ export class Renderizador {
     );
   }
 
-  // Si usas texto, también conviene redondearlo
   texto(texto, x, y, color, fuente) {
     this.contexto.fillStyle = color;
     this.contexto.font = fuente;
