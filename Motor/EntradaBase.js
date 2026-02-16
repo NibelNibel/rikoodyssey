@@ -14,7 +14,6 @@ export class EntradaBase {
     const key = evento.key.toLowerCase();
     this.estados.set(`key_${key}`, presionada);
     
-    // Prevenir comportamiento por defecto para teclas de juego
     const teclasJuego = ['4', '6', 'z', 'x', 'arrowleft', 'arrowright', 'arrowup', 'arrowdown', ' '];
     if (teclasJuego.includes(key)) {
       evento.preventDefault();
@@ -23,7 +22,7 @@ export class EntradaBase {
   }
 
   obtenerEstado(accion) {
-  // Forzamos que si el valor no existe o no es true, devuelva false estrictamente.
+    
   return this.estados.has(accion) && this.estados.get(accion) === true;
 }
 
