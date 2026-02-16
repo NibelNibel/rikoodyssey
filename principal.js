@@ -16,23 +16,15 @@ const recursos = new Recursos();
 const entrada = new EntradaBase();
 const gestor = new GestorEscenas();
 
-/* =========================================
-   DETECCIÓN PROFESIONAL DE DISPOSITIVO
-========================================= */
-
 const esTactil = (
     'ontouchstart' in window ||
     navigator.maxTouchPoints > 0 ||
     navigator.msMaxTouchPoints > 0
 );
 
-// Mostrar UI solo si es táctil
+
 canvasUI.style.display = esTactil ? "block" : "none";
 let mostrarControlesTactiles = esTactil;
-
-/* =========================================
-   CARGA DE RECURSOS
-========================================= */
 
 recursos.cargarImagen("riko_quieta_d0", "./imgs/riko/quieta/riko_quieta_d0.png");
 recursos.cargarImagen("riko_quieta_d1", "./imgs/riko/quieta/riko_quieta_d1.png");
@@ -68,9 +60,6 @@ recursos.cargarImagen("islas_flotantes", "./fondos/islas_flotantes.png");
 recursos.cargarImagen("nota_musical0", "./imgs/nota/nota_musical0.png");
 recursos.cargarImagen("nota_musical1", "./imgs/nota/nota_musical1.png");
 
-/* =========================================
-   ESCENA
-========================================= */
 
 const nivel = new EscenaNivel(ctxUI, recursos);
 
@@ -81,18 +70,15 @@ const controles = {
     dash: false
 };
 
-/* =========================================
-   INPUT TECLADO PROFESIONAL
-========================================= */
 
 window.addEventListener("keydown", (e) => {
 
-    // Toggle UI con H
+  
     if (e.key === "h" || e.key === "H") {
         mostrarControlesTactiles = !mostrarControlesTactiles;
         canvasUI.style.display = mostrarControlesTactiles ? "block" : "none";
 
-        // Limpieza de estados al ocultar
+        
         if (!mostrarControlesTactiles) {
             controles.izquierda = false;
             controles.derecha = false;
@@ -121,9 +107,7 @@ window.addEventListener("blur", () => {
     controles.dash = false;
 });
 
-/* =========================================
-   JUEGO
-========================================= */
+
 
 const juego = new Juego(
   (dt) => {
@@ -140,7 +124,6 @@ const juego = new Juego(
 
     gestor.dibujar(renderizador);
 
-    // Limpiar UI solo si está visible
     if (mostrarControlesTactiles) {
         ctxUI.clearRect(0, 0, canvasUI.width, canvasUI.height);
     }
