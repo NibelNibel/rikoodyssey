@@ -11,9 +11,9 @@ export class EscenaNivel extends Escena {
   constructor(ctxUI, recursos) {
     super();
     this.ctxUI = ctxUI;
-    this.puntos = 0; // Para llevar la cuenta de las monedas
+    this.puntos = 0;
     this.recursos = recursos;
-    // Botones para la interfaz táctil
+    
     this.botones = [
       { id: "btn_izq", x: 70, y: 600, w: 100, h: 100, color: "rgba(255,255,255,0.3)" },
       { id: "btn_der", x: 190, y: 600, w: 100, h: 100, color: "rgba(255,255,255,0.3)" },
@@ -47,18 +47,17 @@ export class EscenaNivel extends Escena {
           this.mundo.agregar(bloque, true);
         } 
         else if (mapa[y][x] === 2) {
-          // El 3 podría ser la posición inicial de Melody
+          
           this.jugador = new Jugador(x * 100, y * 100, this.recursos);
         }
-        // CREACIÓN DE MONEDAS
+      
         else if (mapa[y][x] === 3) {
-          const moneda = new Moneda(x * 100 + 2, y * 100 + 2, this.recursos, new animador(0.5,1)); // Centrada en el tile
-          this.mundo.agregar(moneda, false); // false = NO es sólido
+          const moneda = new Moneda(x * 100 + 2, y * 100 + 2, this.recursos, new animador(0.5,1));
+          this.mundo.agregar(moneda, false);
         }
       }
     }
 
-    // Si no hay punto de inicio en el mapa, poner a Melody en un lugar por defecto
     if (!this.jugador) this.jugador = new Jugador(100, 100, recursos);
     
     this.camara.seguir(this.jugador, 0, 0);
@@ -70,7 +69,8 @@ export class EscenaNivel extends Escena {
   super.actualizar(dt, controles);
   this.jugador.actualizar(dt, this.mundo, controles);
   this.mundo.dt = dt;
-  // Generar partículas al iniciar dash
+  
+
   if (this.jugador.inicioDash) {
     for (let i = 0; i < 20; i++) {
       this.crearParticulaDash();
@@ -104,13 +104,13 @@ export class EscenaNivel extends Escena {
   dibujar(renderizador) {
     
   if (!this.listo) return;
-  // IMPORTANTE: Iniciar el renderizado con la cámara
+
   renderizador.rectangulo(0,0, this.ctxUI.canvas.width, this.ctxUI.canvas.height, "rgb(100,100,255)");
   renderizador.dibujarImagen(this.recursos.obtenerImagen("islas_flotantes"), 0,0, 1280, 720);
   renderizador.comenzar(this.camara);
-  // Dibujar el mundo (los métodos de dibujo del mundo ya reciben la cámara)
+  
   this.mundo?.dibujar(renderizador, this.camara);
-  // Dibujar partículas (antes del jugador)
+
 for (const p of this.particulasDash) {
   renderizador.rectangulo(
     p.x,
@@ -121,15 +121,15 @@ for (const p of this.particulasDash) {
   );
 }
   
-  // Dibujar al jugador
+  
   if (this.jugador) {
     this.jugador.dibujar(renderizador);
   }
   
-  // Terminar el renderizado (restaura el contexto)
+
   renderizador.terminar();
   
-  // UI siempre se dibuja después, sin transformaciones
+  
   this.dibujarUI();
 }
 
@@ -140,7 +140,7 @@ for (const p of this.particulasDash) {
       this.ctxUI.fillStyle = btn.color;
       this.ctxUI.fillRect(btn.x, btn.y, btn.w, btn.h);
       
-      // Icono visual para el botón de pantalla completa
+      
       if (btn.id === "btn_fs") {
         this.ctxUI.strokeStyle = "white";
         this.ctxUI.lineWidth = 2;
@@ -148,7 +148,7 @@ for (const p of this.particulasDash) {
       }
     });
 
-    // Dibujar contador de monedas en pantalla
+  
     this.ctxUI.fillStyle = "yellow";
     this.ctxUI.font = "bold 24px Arial";
     this.ctxUI.textAlign = "left";
