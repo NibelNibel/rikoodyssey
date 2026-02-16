@@ -39,7 +39,7 @@ export class Jugador extends Entidad {
     this.distanciaCaida = 0;
     this.umbralCaida = 201;
 
-    // Temporizador para el estado golpe_cabeza
+    
     this.tiempoGolpe = 0;
     this.duracionGolpe = 0.3;
 
@@ -57,7 +57,7 @@ export class Jugador extends Entidad {
     this.animador.actualizar(dt);
     const ahora = Date.now();
 
-    // Actualizar temporizador de golpe
+    
     if (this.tiempoGolpe > 0) {
       this.tiempoGolpe -= dt;
     }
@@ -137,7 +137,7 @@ export class Jugador extends Entidad {
           this.Audios[1].currentTime = 0;
           this.Audios[1].play();
           this.estado = "golpe_cabeza";
-          this.tiempoGolpe = this.duracionGolpe; // Iniciar temporizador
+          this.tiempoGolpe = this.duracionGolpe; 
           this.vx *= -0.4;
           this.estaDasheando = false;
         } else {
@@ -145,7 +145,7 @@ export class Jugador extends Entidad {
         }
       }
 
-      // --- EJE Y ---
+    
       const velocidadImpactoY = this.vy;
       const deltaY = this.vy * sdt;
       this.y += deltaY;
@@ -158,13 +158,12 @@ export class Jugador extends Entidad {
           this.Audios[1].currentTime = 0;
           this.Audios[1].play();
           this.estado = "golpe_cabeza";
-          this.tiempoGolpe = this.duracionGolpe; // Iniciar temporizador
+          this.tiempoGolpe = this.duracionGolpe;
         }
         this.vy = 0;
       }
     }
 
-    // --- Check suelo ---
     this.y += 1;
     this.enSuelo = mundo.colisionar(this, "y", 1) !== null;
     this.y -= 1;
@@ -174,9 +173,9 @@ export class Jugador extends Entidad {
       this.distanciaCaida += this.vy * dt;
     }
 
-    // --- Lógica de cambio de estado (solo si no está en golpe o el temporizador ya terminó) ---
+
     if (this.tiempoGolpe <= 0) {
-      // Salto
+
       if (controles.salto && this.enSuelo) {
         this.vy = this.fuerzaSalto;
         console.log(this.vy);
