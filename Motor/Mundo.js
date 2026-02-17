@@ -1,4 +1,3 @@
-
 const CELDA = 100;
 
 export class Mundo {
@@ -14,6 +13,10 @@ export class Mundo {
     this.otros = [];
     this.decorativos = [];
     this.dt = 0;
+
+    this.mapaCanvas = document.createElement('canvas');
+    this.mapaCtx = this.mapaCanvas.getContext('2d');
+    this.mapaRenderizado = false;
 
     this.inicializarCuadricula();
   }
@@ -46,42 +49,54 @@ export class Mundo {
       }
     }
   }
-  
+
+  preRenderizar(renderizador) {
+    this.mapaCanvas.width = this.ancho;
+    this.mapaCanvas.height = this.alto;
+
+    const ctxOriginal = renderizador.ctx;
+    renderizador.ctx = this.mapaCtx;
+
+    for (const o of this.decorativos) {
+      renderizador.dibujarImagen(o.imagen, o.x, o.y, o.ancho, o.alto);
+    }
+
+    for (const o of this.solidos) {
+      o.dibujar(renderizador);
+    }
+
+    renderizador.ctx = ctxOriginal;
+    this.mapaRenderizado = true;
+  }
+
   verificarRecoleccion(entidad) {
-    // Solo revisamos la lista de 'otros' (donde están las monedas)
     for (let i = this.otros.length - 1; i >= 0; i--) {
-        const objeto = this.otros[i];
-        
-        // Comprobamos colisión AABB (caja contra caja)
-        if (
-            entidad.x < objeto.x + objeto.ancho &&
-            entidad.x + entidad.ancho > objeto.x &&
-            entidad.y < objeto.y + objeto.alto &&
-            entidad.y + entidad.alto > objeto.y
-        ) {
-            // Si hay contacto, la eliminamos de la lista 'otros'
-            const recolectado = this.otros.splice(i, 1)[0];
-            
-            // TAMBIÉN debemos eliminarla de la cuadrícula espacial para que no se dibuje
-            this.eliminarDeCuadricula(recolectado);
-            
-            return recolectado;
-        }
+      const objeto = this.otros[i];
+      if (
+        entidad.x < objeto.x + objeto.ancho &&
+        entidad.x + entidad.ancho > objeto.x &&
+        entidad.y < objeto.y + objeto.alto &&
+        entidad.y + entidad.alto > objeto.y
+      ) {
+        const recolectado = this.otros.splice(i, 1)[0];
+        this.eliminarDeCuadricula(recolectado);
+        return recolectado;
+      }
     }
     return null;
-}
+  }
 
-// Método auxiliar para limpiar la cuadrícula (Añádelo también)
-eliminarDeCuadricula(objeto) {
+  eliminarDeCuadricula(objeto) {
     for (let f = 0; f < this.filas; f++) {
-        for (let c = 0; c < this.columnas; c++) {
-            const index = this.cuadricula[f][c].indexOf(objeto);
-            if (index !== -1) {
-                this.cuadricula[f][c].splice(index, 1);
-            }
+      for (let c = 0; c < this.columnas; c++) {
+        const index = this.cuadricula[f][c].indexOf(objeto);
+        if (index !== -1) {
+          this.cuadricula[f][c].splice(index, 1);
         }
+      }
     }
-}
+  }
+
   colisionar(entidad, eje, delta) {
     const a = this.obtenerCelda(entidad.x, entidad.y);
     const b = this.obtenerCelda(
@@ -90,7 +105,6 @@ eliminarDeCuadricula(objeto) {
     );
 
     const candidatos = new Set();
-
     for (let f = a.f; f <= b.f; f++) {
       for (let c = a.c; c <= b.c; c++) {
         this.cuadricula[f][c].forEach(o => candidatos.add(o));
@@ -99,7 +113,6 @@ eliminarDeCuadricula(objeto) {
 
     for (const o of candidatos) {
       if (!o.solido) continue;
-
       if (
         entidad.x < o.x + o.ancho &&
         entidad.x + entidad.ancho > o.x &&
@@ -116,57 +129,38 @@ eliminarDeCuadricula(objeto) {
         return o;
       }
     }
-
     return null;
   }
 
   dibujar(renderizador, camara) {
-  
-  const margen = 100;
-  const limIzquierdo = camara ? camara.x - margen : -Infinity;
-  const limDerecho = camara ? camara.x + camara.ancho + margen : Infinity;
-  const limSuperior = camara ? camara.y - margen : -Infinity;
-  const limInferior = camara ? camara.y + camara.alto + margen : Infinity;
-  
-  for (const o of this.decorativos) {
-    if (!camara || (
-      o.x + o.ancho > limIzquierdo &&
-      o.x < limDerecho &&
-      o.y + o.alto > limSuperior &&
-      o.y < limInferior
-    )) {
-      renderizador.dibujarImagen(o.imagen, o.x, o.y, o.ancho, o.alto);
+    if (this.mapaRenderizado) {
+      renderizador.ctx.drawImage(this.mapaCanvas, 0, 0);
+    }
+
+    const margen = 100;
+    const limIzquierdo = camara ? camara.x - margen : -Infinity;
+    const limDerecho = camara ? camara.x + camara.ancho + margen : Infinity;
+    const limSuperior = camara ? camara.y - margen : -Infinity;
+    const limInferior = camara ? camara.y + camara.alto + margen : Infinity;
+
+    for (const o of this.otros) {
+      if (!camara || (
+        o.x + o.ancho > limIzquierdo &&
+        o.x < limDerecho &&
+        o.y + o.alto > limSuperior &&
+        o.y < limInferior
+      )) {
+        o.dibujar(renderizador);
+        o.actualizar(this.dt, this);
+      }
     }
   }
-  
-  for (const o of this.solidos) {
-    if (!camara || (
-      o.x + o.ancho > limIzquierdo &&
-      o.x < limDerecho &&
-      o.y + o.alto > limSuperior &&
-      o.y < limInferior
-    )) {
-      o.dibujar(renderizador);
-    }
-  }
-  
-  for (const o of this.otros) {
-    if (!camara || (
-      o.x + o.ancho > limIzquierdo &&
-      o.x < limDerecho &&
-      o.y + o.alto > limSuperior &&
-      o.y < limInferior
-    )) {
-      o.dibujar(renderizador);
-      o.actualizar(this.dt, this);
-    }
-  }
-}
 
   limpiar() {
     this.solidos.length = 0;
     this.otros.length = 0;
     this.decorativos.length = 0;
+    this.mapaRenderizado = false;
     this.inicializarCuadricula();
   }
 }
