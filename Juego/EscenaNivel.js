@@ -14,7 +14,6 @@ export class EscenaNivel extends Escena {
     this.puntos = 0;
     this.recursos = recursos;
     
-    // Canvas para pre-renderizado del mapa estático
     this.mapaCanvas = document.createElement('canvas');
     this.mapaCtx = this.mapaCanvas.getContext('2d');
     this.mapaRenderizado = false;
@@ -43,14 +42,12 @@ export class EscenaNivel extends Escena {
     const altoMapa = mapa.length * 100;
     const anchoMapa = mapa[0].length * 100;
     
-    // Configurar el canvas de pre-renderizado con el tamaño del mundo
     this.mapaCanvas.width = anchoMapa;
     this.mapaCanvas.height = altoMapa;
     
     this.mundo = new Mundo(anchoMapa, altoMapa);
     this.camara = new Camara(1280, 720);
 
-    // Arrays temporales para el pre-renderizado
     const elementosEstaticos = [];
 
     for (let y = 0; y < mapa.length; y++) {
@@ -59,26 +56,22 @@ export class EscenaNivel extends Escena {
         const xPx = x * 100;
         const yPx = y * 100;
         
-        // Bloque negro (tierra base)
         if (valor === 1) {
           const bloque = new Bloque(xPx, yPx);
           bloque.tierra = 0;
           bloque.imagen = this.recursos.obtenerImagen(`tierra${0}`);
-          this.mundo.agregar(bloque, true); // Para colisiones
+          this.mundo.agregar(bloque, true);
           elementosEstaticos.push(bloque);
         } 
-        // Jugador (posición inicial)
         else if (valor === 2) {
           this.jugador = new Jugador(xPx, yPx, this.recursos);
           this.jugador.limiteX = anchoMapa;
           this.jugador.limiteY = altoMapa;
         }
-        // Moneda
         else if (valor === 3) {
           const moneda = new Moneda(xPx + 2, yPx + 2, this.recursos, new animador(0.5, 1));
           this.mundo.agregar(moneda, false);
         } 
-        // Bloques con texturas del 4 al 15
         else if (valor >= 4 && valor <= 15) {
           const bloque = new Bloque(xPx, yPx);
           bloque.imagen = this.recursos.obtenerImagen(`tierra${valor - 4}`);
@@ -88,7 +81,6 @@ export class EscenaNivel extends Escena {
       }
     }
 
-    // Recolectar y pre-renderizar decorativos
     for (let yd = 0; yd < deco.length; yd++) {
       for (let xd = 0; xd < deco[yd].length; xd++) {
         if (deco[yd][xd] === 16) {
@@ -104,15 +96,11 @@ export class EscenaNivel extends Escena {
           this.mundo.decorativos.push(arbusto);
           elementosEstaticos.push(arbusto);
         }
-        // Aquí puedes agregar más decorativos (flor, cerca, etc)
       }
     }
 
-    // --- PRE-RENDERIZADO DEL MAPA ESTÁTICO ---
-    // Limpiar el canvas
     this.mapaCtx.clearRect(0, 0, this.mapaCanvas.width, this.mapaCanvas.height);
     
-    // Dibujar todos los elementos estáticos en orden
     for (const elemento of elementosEstaticos) {
       if (elemento.imagen) {
         this.mapaCtx.drawImage(
@@ -151,7 +139,6 @@ export class EscenaNivel extends Escena {
       this.jugador.inicioDash = false;
     }
 
-    // Actualizar partículas
     for (let i = this.particulasDash.length - 1; i >= 0; i--) {
       const p = this.particulasDash[i];
       p.x += p.vx * dt;
@@ -165,7 +152,6 @@ export class EscenaNivel extends Escena {
 
     this.camara.actualizar(this.mundo);
 
-    // Verificar recolección de monedas
     const item = this.mundo.verificarRecoleccion(this.jugador);
     if (item) {
       this.Audios[0].currentTime = 0;
@@ -178,26 +164,20 @@ export class EscenaNivel extends Escena {
   dibujar(renderizador) {
     if (!this.listo) return;
 
-    // Fondo
     renderizador.rectangulo(0, 0, this.ctxUI.canvas.width, this.ctxUI.canvas.height, "rgb(100,100,255)");
     renderizador.dibujarImagen(this.recursos.obtenerImagen("islas_flotantes"), 0, 0, 1280, 720);
     
     renderizador.comenzar(this.camara);
     
-    // --- DIBUJAR MAPA PRE-RENDERIZADO (estático) ---
     if (this.mapaRenderizado) {
       renderizador.dibujarImagen(
         this.mapaCanvas,
-        0, 0 // El mapa completo empieza en (0,0)
+        0, 0
       );
     }
     
-    // --- DIBUJAR ELEMENTOS DINÁMICOS (los que se mueven/cambian) ---
-    
-    // Objetos del mundo (monedas, etc)
     this.mundo.dibujarDinamicos(renderizador, this.camara);
     
-    // Partículas del dash
     for (const p of this.particulasDash) {
       renderizador.rectangulo(
         p.x, p.y, p.tamaño, p.tamaño,
@@ -205,7 +185,6 @@ export class EscenaNivel extends Escena {
       );
     }
     
-    // Jugador
     if (this.jugador) {
       this.jugador.dibujar(renderizador);
     }
@@ -218,7 +197,6 @@ export class EscenaNivel extends Escena {
   dibujarUI() {
     this.ctxUI.clearRect(0, 0, 1280, 720);
     
-    // Dibujar botones
     this.botones.forEach(btn => {
       this.ctxUI.fillStyle = btn.color;
       this.ctxUI.fillRect(btn.x, btn.y, btn.w, btn.h);
@@ -230,7 +208,6 @@ export class EscenaNivel extends Escena {
       }
     });
 
-    // Mostrar puntos
     this.ctxUI.fillStyle = "yellow";
     this.ctxUI.font = "bold 24px Arial";
     this.ctxUI.textAlign = "left";
