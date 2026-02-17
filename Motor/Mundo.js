@@ -4,10 +4,8 @@ export class Mundo {
   constructor(ancho, alto) {
     this.ancho = ancho;
     this.alto = alto;
-
     this.columnas = Math.ceil(ancho / CELDA);
     this.filas = Math.ceil(alto / CELDA);
-
     this.cuadricula = [];
     this.solidos = [];
     this.otros = [];
@@ -36,13 +34,8 @@ export class Mundo {
 
   agregar(objeto, solido = false) {
     (solido ? this.solidos : this.otros).push(objeto);
-
     const a = this.obtenerCelda(objeto.x, objeto.y);
-    const b = this.obtenerCelda(
-      objeto.x + objeto.ancho,
-      objeto.y + objeto.alto
-    );
-
+    const b = this.obtenerCelda(objeto.x + objeto.ancho, objeto.y + objeto.alto);
     for (let f = a.f; f <= b.f; f++) {
       for (let c = a.c; c <= b.c; c++) {
         this.cuadricula[f][c].push(objeto);
@@ -54,8 +47,8 @@ export class Mundo {
     this.mapaCanvas.width = this.ancho;
     this.mapaCanvas.height = this.alto;
 
-    const ctxOriginal = renderizador.ctx;
-    renderizador.ctx = this.mapaCtx;
+    const ctxOriginal = renderizador.contexto;
+    renderizador.contexto = this.mapaCtx;
 
     for (const o of this.decorativos) {
       renderizador.dibujarImagen(o.imagen, o.x, o.y, o.ancho, o.alto);
@@ -65,7 +58,7 @@ export class Mundo {
       o.dibujar(renderizador);
     }
 
-    renderizador.ctx = ctxOriginal;
+    renderizador.contexto = ctxOriginal;
     this.mapaRenderizado = true;
   }
 
@@ -90,27 +83,20 @@ export class Mundo {
     for (let f = 0; f < this.filas; f++) {
       for (let c = 0; c < this.columnas; c++) {
         const index = this.cuadricula[f][c].indexOf(objeto);
-        if (index !== -1) {
-          this.cuadricula[f][c].splice(index, 1);
-        }
+        if (index !== -1) this.cuadricula[f][c].splice(index, 1);
       }
     }
   }
 
   colisionar(entidad, eje, delta) {
     const a = this.obtenerCelda(entidad.x, entidad.y);
-    const b = this.obtenerCelda(
-      entidad.x + entidad.ancho,
-      entidad.y + entidad.alto
-    );
-
+    const b = this.obtenerCelda(entidad.x + entidad.ancho, entidad.y + entidad.alto);
     const candidatos = new Set();
     for (let f = a.f; f <= b.f; f++) {
       for (let c = a.c; c <= b.c; c++) {
         this.cuadricula[f][c].forEach(o => candidatos.add(o));
       }
     }
-
     for (const o of candidatos) {
       if (!o.solido) continue;
       if (
@@ -134,7 +120,7 @@ export class Mundo {
 
   dibujar(renderizador, camara) {
     if (this.mapaRenderizado) {
-      renderizador.ctx.drawImage(this.mapaCanvas, 0, 0);
+      renderizador.contexto.drawImage(this.mapaCanvas, 0, 0);
     }
 
     const margen = 100;
