@@ -123,6 +123,7 @@ export class EscenaNivel extends Escena {
         } 
       }
     }
+    console.log(this.mundo.decorativos);
 
     if (!this.jugador) this.jugador = new Jugador(100, 100, recursos);
     
