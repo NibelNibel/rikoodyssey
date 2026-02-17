@@ -1,3 +1,4 @@
+import { Renderizador } from "./Motor/Renderizador.js";
 const CELDA = 100;
 
 export class Mundo {
@@ -126,7 +127,18 @@ eliminarDeCuadricula(objeto) {
   const limDerecho = camara ? camara.x + camara.ancho + margen : Infinity;
   const limSuperior = camara ? camara.y - margen : -Infinity;
   const limInferior = camara ? camara.y + camara.alto + margen : Infinity;
-
+  
+  for (const o of this.decorativos) {
+    if (!camara || (
+      o.x + o.ancho > limIzquierdo &&
+      o.x < limDerecho &&
+      o.y + o.alto > limSuperior &&
+      o.y < limInferior
+    )) {
+      o.dibujar(renderizador);
+    }
+  }
+  
   for (const o of this.solidos) {
     if (!camara || (
       o.x + o.ancho > limIzquierdo &&
