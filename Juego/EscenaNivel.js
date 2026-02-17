@@ -112,7 +112,7 @@ export class EscenaNivel extends Escena {
             y: y,
             imagen: this.recursos.obtenerImagen(`arbusto`)
           }
-          this.mundo.agregar(arbusto, false);
+          this.mundo.decorativos.push(arbusto);
         } 
       }
     }
