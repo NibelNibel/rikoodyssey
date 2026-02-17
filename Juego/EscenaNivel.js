@@ -33,6 +33,7 @@ export class EscenaNivel extends Escena {
 
   async cargar() {
     const mapa = await CargadorNivel.imagenAMapa("./Juego/nivel_1.png");
+    const deco = await CargadorNivel.imagenAMapa("./Juego/nivel_1_deco.png");
     
     const altoMapa = mapa.length * 100;
     const anchoMapa = mapa[0].length * 100;
