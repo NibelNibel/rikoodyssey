@@ -167,6 +167,7 @@ eliminarDeCuadricula(objeto) {
   limpiar() {
     this.solidos.length = 0;
     this.otros.length = 0;
+    this.decorativos.length = 0;
     this.inicializarCuadricula();
   }
 }
