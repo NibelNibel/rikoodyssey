@@ -110,7 +110,7 @@ export class EscenaNivel extends Escena {
 
     if (!this.jugador) this.jugador = new Jugador(100, 100, recursos);
     
-    this.camara.seguir(this.jugador, 0, 0);
+    this.camara.seguir(this.jugador, 0, 100);
   }
 
   actualizar(dt, controles) {
