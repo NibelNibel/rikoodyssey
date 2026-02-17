@@ -31,6 +31,9 @@ export class Mundo {
   }
 
   agregar(objeto, solido = false) {
+    if (solido){
+        this.estaticos.push(objeto);
+    }
     (solido ? this.solidos : this.otros).push(objeto);
 
     const a = this.obtenerCelda(objeto.x, objeto.y);
