@@ -168,13 +168,8 @@ export class EscenaNivel extends Escena {
     
     renderizador.comenzar(this.camara);
     
-    if (this.mapaRenderizado) {
-      renderizador.dibujarImagen(
-        this.mapaCanvas,
-        0, 0
-      );
-    }
-    
+    this.mundo.dibujarEstaticos(renderizador, this.camara);
+
     this.mundo.dibujarDinamicos(renderizador, this.camara);
     
     for (const p of this.particulasDash) {
