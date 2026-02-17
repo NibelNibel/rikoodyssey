@@ -246,6 +246,16 @@ export class Jugador extends Entidad {
         this.particulas.splice(i, 1);
       }
     }
+    if (this.x < 0){
+      this.x = 0;
+    }
+    if (this.x > this.limiteX - this.ancho){
+      this.x = this.limiteX - this.ancho;
+    }
+    if (this.y > this.limiteY){
+      this.x = 100;
+      this.y = 100;
+    }
   }
 
   dibujar(renderizador) {
