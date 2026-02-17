@@ -107,14 +107,7 @@ export class EscenaNivel extends Escena {
           const bloque = new Bloque(x * 100, y * 100);
           bloque.imagen = this.recursos.obtenerImagen(`tierra${12}`);
           this.mundo.agregar(bloque, true);
-        } else if (mapa[y][x] === 16) {
-          const arbusto = {
-            x: x,
-            y: y,
-            imagen: this.recursos.obtenerImagen(`arbusto`)
-          }
-          this.mundo.decorativos.push(arbusto);
-        } 
+        }
       }
     }
     for (let y = 0; y < deco.length; y++) {
