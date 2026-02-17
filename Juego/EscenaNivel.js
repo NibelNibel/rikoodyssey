@@ -114,10 +114,10 @@ export class EscenaNivel extends Escena {
         for (let xd = 0; xd < deco[yd].length; xd++) {
           if (deco[yd][xd] === 16) {
               const arbusto = {
-                  x: xd * 100,
-                  y: yd * 100,
+                  x: xd * 100 + 1,
+                  y: yd * 100 + 44,
                   ancho: 102, 
-                  alto: 56,     
+                  alto: 56 ,     
                   imagen: this.recursos.obtenerImagen("arbusto")
           }
       this.mundo.decorativos.push(arbusto);
