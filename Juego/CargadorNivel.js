@@ -34,6 +34,18 @@ export class CargadorNivel {
               fila.push(3);
             } else if (r === 10 && g === 10 && b === 10) {
               fila.push(4);
+            } else if (r === 20 && g === 20 && b === 20) {
+              fila.push(5);
+            } else if (r === 30 && g === 30 && b === 30) {
+              fila.push(6);
+            } else if (r === 40 && g === 40 && b === 40) {
+              fila.push(7);
+            } else if (r === 50 && g === 50 && b === 50) {
+              fila.push(8);
+            } else if (r === 60 && g === 60 && b === 60) {
+              fila.push(9);
+            } else if (r === 70 && g === 70 && b === 70) {
+              fila.push(10);
             }
             else {
               fila.push(0);
