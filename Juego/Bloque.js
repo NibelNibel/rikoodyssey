@@ -1,13 +1,11 @@
 export class Bloque {
-  constructor(x, y, recursos) {
-    this.recursos = recursos;
+  constructor(x, y) {
     this.x = x;
     this.y = y;
     this.ancho = 100; 
     this.alto = 100;  
     this.solido = true;
-    this.tierra = 0;
-    this.imagen = this.recursos.obtenerImagen(`tierra${this.tierra}`);
+    this.imagen = this.recursos.obtenerImagen(`tierra0`);
   }
 
 
