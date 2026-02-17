@@ -11,6 +11,7 @@ export class Mundo {
     this.cuadricula = [];
     this.solidos = [];    
     this.otros = [];
+    this.estaticos = [];
     this.dt = 0;
 
     this.inicializarCuadricula();
