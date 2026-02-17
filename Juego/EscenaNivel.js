@@ -116,7 +116,7 @@ export class EscenaNivel extends Escena {
           const arbusto = {
             x: xd,
             y: yd,
-            imagen: this.recursos.obtenerImagen(`arbusto`)
+            imagen: this.recursos.obtenerImagen("arbusto")
           }
           this.mundo.decorativos.push(arbusto);
         } 
