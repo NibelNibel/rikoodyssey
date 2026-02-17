@@ -57,7 +57,7 @@ export class CargadorNivel {
             } else if (r === 120 && g === 120 && b === 120) {
               fila.push(15);
             } else if (r === 0 && g === 255 && b === 0) {
-              fila.push(14);
+              fila.push(16);
             }
             else {
               fila.push(0);
