@@ -14,6 +14,11 @@ export class EscenaNivel extends Escena {
     this.puntos = 0;
     this.recursos = recursos;
     
+    // Canvas para pre-renderizado del mapa estático
+    this.mapaCanvas = document.createElement('canvas');
+    this.mapaCtx = this.mapaCanvas.getContext('2d');
+    this.mapaRenderizado = false;
+    
     this.botones = [
       { id: "btn_izq", x: 70, y: 600, w: 100, h: 100, color: "rgba(255,255,255,0.3)" },
       { id: "btn_der", x: 190, y: 600, w: 100, h: 100, color: "rgba(255,255,255,0.3)" },
@@ -26,8 +31,8 @@ export class EscenaNivel extends Escena {
     this.AudiosNombres = ["audios/nota/nota.mp3"];
     for (let i = 0; i < this.AudiosNombres.length; i++) {
       let audio = new Audio(`./${this.AudiosNombres[i]}`);
-        audio.volume = 0.04;
-        this.Audios.push(audio);
+      audio.volume = 0.04;
+      this.Audios.push(audio);
     }
   }
 
@@ -38,175 +43,185 @@ export class EscenaNivel extends Escena {
     const altoMapa = mapa.length * 100;
     const anchoMapa = mapa[0].length * 100;
     
+    // Configurar el canvas de pre-renderizado con el tamaño del mundo
+    this.mapaCanvas.width = anchoMapa;
+    this.mapaCanvas.height = altoMapa;
+    
     this.mundo = new Mundo(anchoMapa, altoMapa);
     this.camara = new Camara(1280, 720);
 
+    // Arrays temporales para el pre-renderizado
+    const elementosEstaticos = [];
+
     for (let y = 0; y < mapa.length; y++) {
       for (let x = 0; x < mapa[y].length; x++) {
-        if (mapa[y][x] === 1) {
-          const bloque = new Bloque(x * 100, y * 100);
+        const valor = mapa[y][x];
+        const xPx = x * 100;
+        const yPx = y * 100;
+        
+        // Bloque negro (tierra base)
+        if (valor === 1) {
+          const bloque = new Bloque(xPx, yPx);
           bloque.tierra = 0;
           bloque.imagen = this.recursos.obtenerImagen(`tierra${0}`);
-          this.mundo.agregar(bloque, true);
+          this.mundo.agregar(bloque, true); // Para colisiones
+          elementosEstaticos.push(bloque);
         } 
-        else if (mapa[y][x] === 2) {
-          
-          this.jugador = new Jugador(x * 100, y * 100, this.recursos);
+        // Jugador (posición inicial)
+        else if (valor === 2) {
+          this.jugador = new Jugador(xPx, yPx, this.recursos);
           this.jugador.limiteX = anchoMapa;
           this.jugador.limiteY = altoMapa;
         }
-      
-        else if (mapa[y][x] === 3) {
-          const moneda = new Moneda(x * 100 + 2, y * 100 + 2, this.recursos, new animador(0.5,1));
+        // Moneda
+        else if (valor === 3) {
+          const moneda = new Moneda(xPx + 2, yPx + 2, this.recursos, new animador(0.5, 1));
           this.mundo.agregar(moneda, false);
-        } else if (mapa[y][x] === 4) {
-          const bloque = new Bloque(x * 100, y * 100);
-          bloque.imagen = this.recursos.obtenerImagen(`tierra${1}`);
+        } 
+        // Bloques con texturas del 4 al 15
+        else if (valor >= 4 && valor <= 15) {
+          const bloque = new Bloque(xPx, yPx);
+          bloque.imagen = this.recursos.obtenerImagen(`tierra${valor - 4}`);
           this.mundo.agregar(bloque, true);
-        } else if (mapa[y][x] === 5) {
-          const bloque = new Bloque(x * 100, y * 100);
-          bloque.imagen = this.recursos.obtenerImagen(`tierra${2}`);
-          this.mundo.agregar(bloque, true);
-        } else if (mapa[y][x] === 6) {
-          const bloque = new Bloque(x * 100, y * 100);
-          bloque.imagen = this.recursos.obtenerImagen(`tierra${3}`);
-          this.mundo.agregar(bloque, true);
-        } else if (mapa[y][x] === 7) {
-          const bloque = new Bloque(x * 100, y * 100);
-          bloque.imagen = this.recursos.obtenerImagen(`tierra${4}`);
-          this.mundo.agregar(bloque, true);
-        } else if (mapa[y][x] === 8) {
-          const bloque = new Bloque(x * 100, y * 100);
-          bloque.imagen = this.recursos.obtenerImagen(`tierra${5}`);
-          this.mundo.agregar(bloque, true);
-        } else if (mapa[y][x] === 9) {
-          const bloque = new Bloque(x * 100, y * 100);
-          bloque.imagen = this.recursos.obtenerImagen(`tierra${6}`);
-          this.mundo.agregar(bloque, true);
-        } else if (mapa[y][x] === 10) {
-          const bloque = new Bloque(x * 100, y * 100);
-          bloque.imagen = this.recursos.obtenerImagen(`tierra${7}`);
-          this.mundo.agregar(bloque, true);
-        } else if (mapa[y][x] === 11) {
-          const bloque = new Bloque(x * 100, y * 100);
-          bloque.imagen = this.recursos.obtenerImagen(`tierra${8}`);
-          this.mundo.agregar(bloque, true);
-        } else if (mapa[y][x] === 12) {
-          const bloque = new Bloque(x * 100, y * 100);
-          bloque.imagen = this.recursos.obtenerImagen(`tierra${9}`);
-          this.mundo.agregar(bloque, true);
-        } else if (mapa[y][x] === 13) {
-          const bloque = new Bloque(x * 100, y * 100);
-          bloque.imagen = this.recursos.obtenerImagen(`tierra${10}`);
-          this.mundo.agregar(bloque, true);
-        } else if (mapa[y][x] === 14) {
-          const bloque = new Bloque(x * 100, y * 100);
-          bloque.imagen = this.recursos.obtenerImagen(`tierra${11}`);
-          this.mundo.agregar(bloque, true);
-        } else if (mapa[y][x] === 15) {
-          const bloque = new Bloque(x * 100, y * 100);
-          bloque.imagen = this.recursos.obtenerImagen(`tierra${12}`);
-          this.mundo.agregar(bloque, true);
+          elementosEstaticos.push(bloque);
         }
       }
     }
+
+    // Recolectar y pre-renderizar decorativos
     for (let yd = 0; yd < deco.length; yd++) {
-        for (let xd = 0; xd < deco[yd].length; xd++) {
-            if (deco[yd][xd] === 16) {
-                const arbusto = {
-                    x: xd * 100 + 1,
-                    y: yd * 100 + 60,
-                    ancho: 102, 
-                    alto: 40,     
-                    imagen: this.recursos.obtenerImagen("arbusto")
-                }
-                this.mundo.decorativos.push(arbusto);
-            }
+      for (let xd = 0; xd < deco[yd].length; xd++) {
+        if (deco[yd][xd] === 16) {
+          const xPx = xd * 100;
+          const yPx = yd * 100;
+          const arbusto = {
+            x: xPx,
+            y: yPx,
+            ancho: 102,
+            alto: 56,
+            imagen: this.recursos.obtenerImagen("arbusto")
+          };
+          this.mundo.decorativos.push(arbusto);
+          elementosEstaticos.push(arbusto);
         }
+        // Aquí puedes agregar más decorativos (flor, cerca, etc)
+      }
     }
 
-    if (!this.jugador) this.jugador = new Jugador(100, 100, recursos);
+    // --- PRE-RENDERIZADO DEL MAPA ESTÁTICO ---
+    // Limpiar el canvas
+    this.mapaCtx.clearRect(0, 0, this.mapaCanvas.width, this.mapaCanvas.height);
+    
+    // Dibujar todos los elementos estáticos en orden
+    for (const elemento of elementosEstaticos) {
+      if (elemento.imagen) {
+        this.mapaCtx.drawImage(
+          elemento.imagen,
+          elemento.x,
+          elemento.y,
+          elemento.ancho || 100,
+          elemento.alto || 100
+        );
+      }
+    }
+    
+    this.mapaRenderizado = true;
+
+    if (!this.jugador) {
+      this.jugador = new Jugador(100, 100, this.recursos);
+      this.jugador.limiteX = anchoMapa;
+      this.jugador.limiteY = altoMapa;
+    }
     
     this.camara.seguir(this.jugador, 0, 100);
+    console.log("Nivel cargado y pre-renderizado");
   }
 
   actualizar(dt, controles) {
-  if (!this.listo) return;
+    if (!this.listo) return;
 
-  super.actualizar(dt, controles);
-  this.jugador.actualizar(dt, this.mundo, controles);
-  this.mundo.dt = dt;
-  
-
-  if (this.jugador.inicioDash) {
-    for (let i = 0; i < 20; i++) {
-      this.crearParticulaDash();
+    super.actualizar(dt, controles);
+    this.jugador.actualizar(dt, this.mundo, controles);
+    this.mundo.dt = dt;
+    
+    if (this.jugador.inicioDash) {
+      for (let i = 0; i < 20; i++) {
+        this.crearParticulaDash();
+      }
+      this.jugador.inicioDash = false;
     }
-    this.jugador.inicioDash = false;
-  }
 
-  // Actualizar partículas
-  for (let i = this.particulasDash.length - 1; i >= 0; i--) {
-    const p = this.particulasDash[i];
-    p.x += p.vx * dt;
-    p.y += p.vy * dt;
-    p.vida -= dt;
+    // Actualizar partículas
+    for (let i = this.particulasDash.length - 1; i >= 0; i--) {
+      const p = this.particulasDash[i];
+      p.x += p.vx * dt;
+      p.y += p.vy * dt;
+      p.vida -= dt;
 
-    if (p.vida <= 0) {
-      this.particulasDash.splice(i, 1);
+      if (p.vida <= 0) {
+        this.particulasDash.splice(i, 1);
+      }
+    }
+
+    this.camara.actualizar(this.mundo);
+
+    // Verificar recolección de monedas
+    const item = this.mundo.verificarRecoleccion(this.jugador);
+    if (item) {
+      this.Audios[0].currentTime = 0;
+      this.Audios[0].play();
+      this.puntos += item.valor;
+      console.log("Monedas recolectadas:", this.puntos);
     }
   }
-
-  this.camara.actualizar(this.mundo);
-
-  const item = this.mundo.verificarRecoleccion(this.jugador);
-  if (item) {
-    this.Audios[0].currentTime = 0;
-    this.Audios[0].play();
-    this.puntos += item.valor;
-    console.log("Monedas recolectadas:", this.puntos);
-  }
-}
 
   dibujar(renderizador) {
+    if (!this.listo) return;
+
+    // Fondo
+    renderizador.rectangulo(0, 0, this.ctxUI.canvas.width, this.ctxUI.canvas.height, "rgb(100,100,255)");
+    renderizador.dibujarImagen(this.recursos.obtenerImagen("islas_flotantes"), 0, 0, 1280, 720);
     
-  if (!this.listo) return;
-
-  renderizador.rectangulo(0,0, this.ctxUI.canvas.width, this.ctxUI.canvas.height, "rgb(100,100,255)");
-  renderizador.dibujarImagen(this.recursos.obtenerImagen("islas_flotantes"), 0,0, 1280, 720);
-  renderizador.comenzar(this.camara);
-  
-  this.mundo?.dibujar(renderizador, this.camara);
-
-for (const p of this.particulasDash) {
-  renderizador.rectangulo(
-    p.x,
-    p.y,
-    p.tamaño,
-    p.tamaño,
-    `rgba(255,255,255,${p.vida * 2})`
-  );
-}
-  
-  
-  if (this.jugador) {
-    this.jugador.dibujar(renderizador);
+    renderizador.comenzar(this.camara);
+    
+    // --- DIBUJAR MAPA PRE-RENDERIZADO (estático) ---
+    if (this.mapaRenderizado) {
+      renderizador.dibujarImagen(
+        this.mapaCanvas,
+        0, 0 // El mapa completo empieza en (0,0)
+      );
+    }
+    
+    // --- DIBUJAR ELEMENTOS DINÁMICOS (los que se mueven/cambian) ---
+    
+    // Objetos del mundo (monedas, etc)
+    this.mundo.dibujarDinamicos(renderizador, this.camara);
+    
+    // Partículas del dash
+    for (const p of this.particulasDash) {
+      renderizador.rectangulo(
+        p.x, p.y, p.tamaño, p.tamaño,
+        `rgba(255,255,255,${p.vida * 2})`
+      );
+    }
+    
+    // Jugador
+    if (this.jugador) {
+      this.jugador.dibujar(renderizador);
+    }
+    
+    renderizador.terminar();
+    
+    this.dibujarUI();
   }
-  
-
-  renderizador.terminar();
-  
-  
-  this.dibujarUI();
-}
 
   dibujarUI() {
     this.ctxUI.clearRect(0, 0, 1280, 720);
     
+    // Dibujar botones
     this.botones.forEach(btn => {
       this.ctxUI.fillStyle = btn.color;
       this.ctxUI.fillRect(btn.x, btn.y, btn.w, btn.h);
-      
       
       if (btn.id === "btn_fs") {
         this.ctxUI.strokeStyle = "white";
@@ -215,7 +230,7 @@ for (const p of this.particulasDash) {
       }
     });
 
-  
+    // Mostrar puntos
     this.ctxUI.fillStyle = "yellow";
     this.ctxUI.font = "bold 24px Arial";
     this.ctxUI.textAlign = "left";
@@ -273,22 +288,23 @@ for (const p of this.particulasDash) {
       document.exitFullscreen();
     }
   }
+
   crearParticulaDash() {
-  if (!this.jugador) return;
+    if (!this.jugador) return;
 
-  const dir = this.jugador.direccion === "d" ? 1 : -1;
-  
-  const offsetX = dir === 1 ? -20 : this.jugador.ancho + 20;
-  const x = this.jugador.x + offsetX;
-  const y = this.jugador.y + this.jugador.alto / 2;
+    const dir = this.jugador.direccion === "d" ? 1 : -1;
+    
+    const offsetX = dir === 1 ? -20 : this.jugador.ancho + 20;
+    const x = this.jugador.x + offsetX;
+    const y = this.jugador.y + this.jugador.alto / 2;
 
-  this.particulasDash.push({
-    x,
-    y,
-    vx: -dir * (200 + Math.random() * 150),
-    vy: (Math.random() - 0.5) * 100,
-    vida: 0.5 + Math.random() * 0.8,
-    tamaño: 3 + Math.random() * 5
-  });
-}
+    this.particulasDash.push({
+      x,
+      y,
+      vx: -dir * (200 + Math.random() * 150),
+      vy: (Math.random() - 0.5) * 100,
+      vida: 0.5 + Math.random() * 0.8,
+      tamaño: 3 + Math.random() * 5
+    });
+  }
 }
