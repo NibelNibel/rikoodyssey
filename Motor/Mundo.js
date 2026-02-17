@@ -9,8 +9,8 @@ export class Mundo {
     this.filas = Math.ceil(alto / CELDA);
 
     this.cuadricula = [];
-    this.solidos = [];      // Solo para colisiones (bloques)
-    this.otros = [];        // Elementos dinámicos (monedas, enemigos)
+    this.solidos = [];    
+    this.otros = [];
     this.dt = 0;
 
     this.inicializarCuadricula();
