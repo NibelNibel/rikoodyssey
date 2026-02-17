@@ -43,7 +43,7 @@ export class EscenaNivel extends Escena {
     for (let y = 0; y < mapa.length; y++) {
       for (let x = 0; x < mapa[y].length; x++) {
         if (mapa[y][x] === 1) {
-          const bloque = new Bloque(x * 100, y * 100);
+          const bloque = new Bloque(x * 100, y * 100, this.recursos);
           this.mundo.agregar(bloque, true);
         } 
         else if (mapa[y][x] === 2) {
