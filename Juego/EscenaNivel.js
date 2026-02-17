@@ -111,18 +111,19 @@ export class EscenaNivel extends Escena {
       }
     }
     for (let yd = 0; yd < deco.length; yd++) {
-      for (let xd = 0; xd < deco[yd].length; xd++) {
-        if (deco[yd][xd] === 16) {
-          const arbusto = {
-            x: xd,
-            y: yd,
-            imagen: this.recursos.obtenerImagen("arbusto")
+        for (let xd = 0; xd < deco[yd].length; xd++) {
+          if (deco[yd][xd] === 16) {
+              const arbusto = {
+                  x: xd * 100,
+                  y: yd * 100,
+                  ancho: 102, 
+                  alto: 56,     
+                  imagen: this.recursos.obtenerImagen("arbusto")
           }
-          this.mundo.decorativos.push(arbusto);
-          console.log("arbusto agregado");
-        } 
-      }
+      this.mundo.decorativos.push(arbusto);
     }
+  }
+}
     console.log(this.mundo.decorativos);
 
     if (!this.jugador) this.jugador = new Jugador(100, 100, recursos);
