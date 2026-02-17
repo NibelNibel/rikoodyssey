@@ -135,7 +135,7 @@ eliminarDeCuadricula(objeto) {
       o.y + o.alto > limSuperior &&
       o.y < limInferior
     )) {
-      renderizador.dibujarImagen(o.imagen, o.x + 1, o.y +44, o.ancho, o.alto);
+      renderizador.dibujarImagen(o.imagen, o.x, o.y, o.ancho, o.alto);
       console.log("arbusto dibujado");
     }
   }
