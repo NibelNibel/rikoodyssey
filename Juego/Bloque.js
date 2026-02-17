@@ -12,12 +12,11 @@ export class Bloque {
 
 
   dibujar(renderizador) {
+  //renderizador.rectangulo(this.x, this.y, this.ancho, this.alto, "rgb(180,180,180)");
 
-  renderizador.rectangulo(this.x, this.y, this.ancho, this.alto, "rgb(180,180,180)");
-
-  renderizador.contexto.strokeStyle = "#22223b";
-  renderizador.contexto.lineWidth = 1;
-  renderizador.contexto.strokeRect(this.x, this.y, this.ancho, this.alto);
+  //renderizador.contexto.strokeStyle = "#22223b";
+  //renderizador.contexto.lineWidth = 1;
+  //renderizador.contexto.strokeRect(this.x, this.y, this.ancho, this.alto);
   renderizador.dibujarImagen(this.imagen, this.x + 1, this.y + 1, 102, 102);
 }
 }
