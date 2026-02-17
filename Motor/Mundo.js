@@ -48,6 +48,25 @@ export class Mundo {
       }
     }
   }
+  
+  dibujarEstaticos(renderizador, camara) {
+  const margen = 100;
+  const limIzquierdo = camara ? camara.x - margen : -Infinity;
+  const limDerecho = camara ? camara.x + camara.ancho + margen : Infinity;
+  const limSuperior = camara ? camara.y - margen : -Infinity;
+  const limInferior = camara ? camara.y + camara.alto + margen : Infinity;
+  
+  for (const o of this.estaticos) {
+    if (!camara || (
+      o.x + o.ancho > limIzquierdo &&
+      o.x < limDerecho &&
+      o.y + o.alto > limSuperior &&
+      o.y < limInferior
+    )) {
+      o.dibujar(renderizador);
+    }
+  }
+}
 
   verificarRecoleccion(entidad) {
     for (let i = this.otros.length - 1; i >= 0; i--) {
