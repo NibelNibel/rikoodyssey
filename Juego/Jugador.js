@@ -7,7 +7,9 @@ export class Jugador extends Entidad {
 
     this.recursos = recursos;
     this.imagen = this.recursos.obtenerImagen("riko_correr_d0");
-
+    
+    this.limiteX = 0;
+    this.limiteY = 0;
     this.velocidadMax = 450;
     this.fuerzaSalto = -950;
     this.gravedad = 2100;
