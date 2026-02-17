@@ -51,6 +51,8 @@ export class EscenaNivel extends Escena {
         else if (mapa[y][x] === 2) {
           
           this.jugador = new Jugador(x * 100, y * 100, this.recursos);
+          this.jugador.limiteX = anchoMapa;
+          this.jugador.limiteY = altoMapa;
         }
       
         else if (mapa[y][x] === 3) {
