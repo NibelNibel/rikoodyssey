@@ -45,6 +45,7 @@ export class EscenaNivel extends Escena {
         if (mapa[y][x] === 1) {
           const bloque = new Bloque(x * 100, y * 100, this.recursos);
           bloque.tierra = 0;
+          bloque.imagen = this.recursos.obtenerImagen(`tierra${0}`);
           this.mundo.agregar(bloque, true);
         } 
         else if (mapa[y][x] === 2) {
@@ -57,51 +58,51 @@ export class EscenaNivel extends Escena {
           this.mundo.agregar(moneda, false);
         } else if (mapa[y][x] === 4) {
           const bloque = new Bloque(x * 100, y * 100, this.recursos);
-          bloque.tierra = 1;
+          bloque.imagen = this.recursos.obtenerImagen(`tierra${1}`);
           this.mundo.agregar(bloque, true);
         } else if (mapa[y][x] === 5) {
           const bloque = new Bloque(x * 100, y * 100, this.recursos);
-          bloque.tierra = 2;
+          bloque.imagen = this.recursos.obtenerImagen(`tierra${2}`);
           this.mundo.agregar(bloque, true);
         } else if (mapa[y][x] === 6) {
           const bloque = new Bloque(x * 100, y * 100, this.recursos);
-          bloque.tierra = 3;
+          bloque.imagen = this.recursos.obtenerImagen(`tierra${3}`);
           this.mundo.agregar(bloque, true);
         } else if (mapa[y][x] === 7) {
           const bloque = new Bloque(x * 100, y * 100, this.recursos);
-          bloque.tierra = 4;
+          bloque.imagen = this.recursos.obtenerImagen(`tierra${4}`);
           this.mundo.agregar(bloque, true);
         } else if (mapa[y][x] === 8) {
           const bloque = new Bloque(x * 100, y * 100, this.recursos);
-          bloque.tierra = 5;
+          bloque.imagen = this.recursos.obtenerImagen(`tierra${5}`);
           this.mundo.agregar(bloque, true);
         } else if (mapa[y][x] === 9) {
           const bloque = new Bloque(x * 100, y * 100, this.recursos);
-          bloque.tierra = 6;
+          bloque.imagen = this.recursos.obtenerImagen(`tierra${6}`);
           this.mundo.agregar(bloque, true);
         } else if (mapa[y][x] === 10) {
           const bloque = new Bloque(x * 100, y * 100, this.recursos);
-          bloque.tierra = 7;
+          bloque.imagen = this.recursos.obtenerImagen(`tierra${7}`);
           this.mundo.agregar(bloque, true);
         } else if (mapa[y][x] === 11) {
           const bloque = new Bloque(x * 100, y * 100, this.recursos);
-          bloque.tierra = 8;
+          bloque.imagen = this.recursos.obtenerImagen(`tierra${8}`);
           this.mundo.agregar(bloque, true);
         } else if (mapa[y][x] === 12) {
           const bloque = new Bloque(x * 100, y * 100, this.recursos);
-          bloque.tierra = 9;
+          bloque.imagen = this.recursos.obtenerImagen(`tierra${9}`);
           this.mundo.agregar(bloque, true);
         } else if (mapa[y][x] === 13) {
           const bloque = new Bloque(x * 100, y * 100, this.recursos);
-          bloque.tierra = 10;
+          bloque.imagen = this.recursos.obtenerImagen(`tierra${10}`);
           this.mundo.agregar(bloque, true);
         } else if (mapa[y][x] === 14) {
           const bloque = new Bloque(x * 100, y * 100, this.recursos);
-          bloque.tierra = 11;
+          bloque.imagen = this.recursos.obtenerImagen(`tierra${11}`);
           this.mundo.agregar(bloque, true);
         } else if (mapa[y][x] === 15) {
           const bloque = new Bloque(x * 100, y * 100, this.recursos);
-          bloque.tierra = 12;
+          bloque.imagen = this.recursos.obtenerImagen(`tierra${12}`);
           this.mundo.agregar(bloque, true);
         } 
       }
