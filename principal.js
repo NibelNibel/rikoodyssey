@@ -63,65 +63,50 @@ recursos.cargarImagen("nota_musical0", "./imgs/nota/nota_musical0.png");
 recursos.cargarImagen("nota_musical1", "./imgs/nota/nota_musical1.png");
 const nivel = new EscenaNivel(ctxUI, recursos);
 const controles = {
-    izquierda: false,
-    derecha: false,
-    salto: false,
-    dash: false
+izquierda: false,
+derecha: false,
+salto: false,
+dash: false
 };
 
-
-let controlesTactilesActivos = true;
-
 window.addEventListener("keydown", (e) => {
-    
-    if (e.key === "t" || e.key === "T") {
-        controlesTactilesActivos = !controlesTactilesActivos;
-        if (controlesTactilesActivos) {
-            nivel.configurarControlesTactiles(controles);
-        } else {
-            nivel.desactivarControlesTactiles();
-        }
-        console.log(`Controles táctiles: ${controlesTactilesActivos ? "Activados" : "Desactivados"}`);
-        return;
-    }
-
-    if (e.key === "ArrowLeft" || e.key === "a") controles.izquierda = true;
-    if (e.key === "ArrowRight" || e.key === "d") controles.derecha = true;
-    if (e.key === "ArrowUp" || e.key === "w" || e.key === " ") controles.salto = true;
-    if (e.key === "Shift" || e.key === "k") controles.dash = true;
+if (e.key === "ArrowLeft" || e.key === "a") controles.izquierda = true;
+if (e.key === "ArrowRight" || e.key === "d") controles.derecha = true;
+if (e.key === "ArrowUp" || e.key === "w" || e.key === " ") controles.salto = true;
+if (e.key === "Shift" || e.key === "k") controles.dash = true;
 });
 
 window.addEventListener("keyup", (e) => {
-    if (e.key === "ArrowLeft" || e.key === "a") controles.izquierda = false;
-    if (e.key === "ArrowRight" || e.key === "d") controles.derecha = false;
-    if (e.key === "ArrowUp" || e.key === "w" || e.key === " ") controles.salto = false;
-    if (e.key === "Shift" || e.key === "k") controles.dash = false;
+if (e.key === "ArrowLeft" || e.key === "a") controles.izquierda = false;
+if (e.key === "ArrowRight" || e.key === "d") controles.derecha = false;
+if (e.key === "ArrowUp" || e.key === "w" || e.key === " ") controles.salto = false;
 });
 
 window.addEventListener("blur", () => {
-    controles.izquierda = false;
-    controles.derecha = false;
-    controles.salto = false;
+controles.izquierda = false;
+controles.derecha = false;
+controles.salto = false;
 });
 // Cargar imagenes
 const juego = new Juego(
-  (dt) => {
-    if (!recursos.listo()) return;
-    gestor.actualizar(dt, controles);
-  },
-  () => {
-    renderizador.limpiar(canvas.width, canvas.height);
+(dt) => {
+if (!recursos.listo()) return;
+gestor.actualizar(dt, controles);
+},
+() => {
+renderizador.limpiar(canvas.width, canvas.height);
 
-    if (!recursos.listo()) {
-      renderizador.rectangulo(0, 0, canvas.width, canvas.height, "black");
-      return;
-    }
+if (!recursos.listo()) {  
+  renderizador.rectangulo(0, 0, canvas.width, canvas.height, "black");  
+  return;  
+}  
 
-    gestor.dibujar(renderizador);
-  }
+gestor.dibujar(renderizador);
+
+}
 );
 
 gestor.cambiarEscena(nivel).then(() => {
-    nivel.configurarControlesTactiles(controles);
+nivel.configurarControlesTactiles(controles);
 });
 juego.iniciar();
