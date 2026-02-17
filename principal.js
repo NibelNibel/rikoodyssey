@@ -45,18 +45,18 @@ recursos.cargarImagen("riko_golpe_cabeza_i0", "./imgs/riko/golpear_cabeza/riko_g
 recursos.cargarImagen("riko_golpe_cabeza_i1", "./imgs/riko/golpear_cabeza/riko_golpe_cabeza_i1.png");
 
 recursos.cargarImagen("tierra0", "./imgs/tierra/tierra0.png");
-recursos.cargarImagen("tierra1", "./imgs/tierra/tierra01.png");
-recursos.cargarImagen("tierra2", "./imgs/tierra/tierra02.png");
-recursos.cargarImagen("tierra3", "./imgs/tierra/tierra03.png");
-recursos.cargarImagen("tierra4", "./imgs/tierra/tierra04.png");
-recursos.cargarImagen("tierra5", "./imgs/tierra/tierra05.png");
-recursos.cargarImagen("tierra6", "./imgs/tierra/tierra06.png");
-recursos.cargarImagen("tierra7", "./imgs/tierra/tierra07.png");
-recursos.cargarImagen("tierra8", "./imgs/tierra/tierra08.png");
-recursos.cargarImagen("tierra9", "./imgs/tierra/tierra09.png");
-recursos.cargarImagen("tierra10", "./imgs/tierra/tierra010.png");
-recursos.cargarImagen("tierra11", "./imgs/tierra/tierra011.png");
-recursos.cargarImagen("tierra12", "./imgs/tierra/tierra012.png");
+recursos.cargarImagen("tierra1", "./imgs/tierra/tierra1.png");
+recursos.cargarImagen("tierra2", "./imgs/tierra/tierra2.png");
+recursos.cargarImagen("tierra3", "./imgs/tierra/tierra3.png");
+recursos.cargarImagen("tierra4", "./imgs/tierra/tierra4.png");
+recursos.cargarImagen("tierra5", "./imgs/tierra/tierra5.png");
+recursos.cargarImagen("tierra6", "./imgs/tierra/tierra6.png");
+recursos.cargarImagen("tierra7", "./imgs/tierra/tierra7.png");
+recursos.cargarImagen("tierra8", "./imgs/tierra/tierra8.png");
+recursos.cargarImagen("tierra9", "./imgs/tierra/tierra9.png");
+recursos.cargarImagen("tierra10", "./imgs/tierra/tierra10.png");
+recursos.cargarImagen("tierra11", "./imgs/tierra/tierra11.png");
+recursos.cargarImagen("tierra12", "./imgs/tierra/tierra12.png");
 
 recursos.cargarImagen("islas_flotantes", "./fondos/islas_flotantes.png");
 recursos.cargarImagen("nota_musical0", "./imgs/nota/nota_musical0.png");
