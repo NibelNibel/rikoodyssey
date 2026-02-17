@@ -252,6 +252,7 @@ export class Jugador extends Entidad {
     }
     if (this.x > this.limiteX - this.ancho){
       this.x = this.limiteX - this.ancho;
+      this.vx = 0;
     }
     if (this.y > this.limiteY){
       this.x = 100;
