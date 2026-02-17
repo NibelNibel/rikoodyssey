@@ -45,21 +45,7 @@ export class Mundo {
       }
     }
   }
-  agregarDecoracion(objeto) {
-    (solido ? this.solidos : this.otros).push(objeto);
-
-    const a = this.obtenerCelda(objeto.x, objeto.y);
-    const b = this.obtenerCelda(
-      objeto.x + objeto.ancho,
-      objeto.y + objeto.alto
-    );
-
-    for (let f = a.f; f <= b.f; f++) {
-      for (let c = a.c; c <= b.c; c++) {
-        this.cuadricula[f][c].push(objeto);
-      }
-    }
-  }
+  
   verificarRecoleccion(entidad) {
     // Solo revisamos la lista de 'otros' (donde están las monedas)
     for (let i = this.otros.length - 1; i >= 0; i--) {
