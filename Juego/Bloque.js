@@ -5,7 +5,7 @@ export class Bloque {
     this.ancho = 100; 
     this.alto = 100;  
     this.solido = true;
-    this.imagen = this.recursos.obtenerImagen(`tierra0`);
+    this.imagen = null;
   }
 
 
