@@ -11,6 +11,7 @@ export class Mundo {
     this.cuadricula = [];
     this.solidos = [];
     this.otros = [];
+    this.decorativos = [];
     this.dt = 0;
 
     this.inicializarCuadricula();
@@ -30,6 +31,21 @@ export class Mundo {
   }
 
   agregar(objeto, solido = false) {
+    (solido ? this.solidos : this.otros).push(objeto);
+
+    const a = this.obtenerCelda(objeto.x, objeto.y);
+    const b = this.obtenerCelda(
+      objeto.x + objeto.ancho,
+      objeto.y + objeto.alto
+    );
+
+    for (let f = a.f; f <= b.f; f++) {
+      for (let c = a.c; c <= b.c; c++) {
+        this.cuadricula[f][c].push(objeto);
+      }
+    }
+  }
+  agregarDecoracion(objeto) {
     (solido ? this.solidos : this.otros).push(objeto);
 
     const a = this.obtenerCelda(objeto.x, objeto.y);
