@@ -1,4 +1,4 @@
-import { Renderizador } from "./Motor/Renderizador.js";
+
 const CELDA = 100;
 
 export class Mundo {
@@ -135,7 +135,7 @@ eliminarDeCuadricula(objeto) {
       o.y + o.alto > limSuperior &&
       o.y < limInferior
     )) {
-      o.dibujar(renderizador);
+      renderizador.dibujarImagen(o.imagen, o.x + 1, o.y +44, 102, 56);
     }
   }
   
