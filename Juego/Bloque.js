@@ -15,6 +15,6 @@ export class Bloque {
   //renderizador.contexto.strokeStyle = "#22223b";
   //renderizador.contexto.lineWidth = 1;
   //renderizador.contexto.strokeRect(this.x, this.y, this.ancho, this.alto);
-  renderizador.dibujarImagen(this.imagen, this.x, this.y, 102, 102);
+  renderizador.dibujarImagen(this.imagen, this.x - 1, this.y - 1, 102, 102);
 }
 }
