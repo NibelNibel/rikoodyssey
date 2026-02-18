@@ -41,7 +41,7 @@ export class EscenaNivel extends Escena {
     for (let y = 0; y < mapa.length; y++) {
       for (let x = 0; x < mapa[y].length; x++) {
         if (mapa[y][x] === 1 || (mapa[y][x] >= 4 && mapa[y][x] <= 15)) {
-          const bloque = new Bloque(x * 100 - 1, y * 100 - 1);
+          const bloque = new Bloque(x * 100, y * 100);
           const imgMap = {1:0, 4:1, 5:2, 6:3, 7:4, 8:5, 9:6, 10:7, 11:8, 12:9, 13:10, 14:11, 15:12};
           bloque.imagen = this.recursos.obtenerImagen(`tierra${imgMap[mapa[y][x]]}`);
           this.mundo.agregar(bloque, true);
