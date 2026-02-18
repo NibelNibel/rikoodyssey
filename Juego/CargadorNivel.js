@@ -5,7 +5,6 @@ export class CargadorNivel {
 
       const img = new Image();
 
-      // Importante si estás en GitHub Pages o similar
       img.crossOrigin = "anonymous";
       img.src = rutaImagen;
 
@@ -22,7 +21,6 @@ export class CargadorNivel {
         canvas.width = img.width;
         canvas.height = img.height;
 
-        // Evita suavizado
         ctx.imageSmoothingEnabled = false;
 
         ctx.drawImage(img, 0, 0);
@@ -30,7 +28,6 @@ export class CargadorNivel {
         const data = ctx.getImageData(0, 0, img.width, img.height).data;
         const mapa = [];
 
-        // 🔒 Función tolerante a alteraciones leves de color (Brave fix)
         function colorCercano(r, g, b, tr, tg, tb, tolerancia = 3) {
           return (
             Math.abs(r - tr) <= tolerancia &&
@@ -56,7 +53,7 @@ export class CargadorNivel {
               continue;
             }
 
-            // 🧱 Bloques
+            // Bloques
             if (colorCercano(r, g, b, 0, 0, 0)) fila.push(1);
             else if (colorCercano(r, g, b, 255, 0, 0)) fila.push(2);
             else if (colorCercano(r, g, b, 255, 255, 0)) fila.push(3);
@@ -73,7 +70,7 @@ export class CargadorNivel {
             else if (colorCercano(r, g, b, 110, 110, 110)) fila.push(14);
             else if (colorCercano(r, g, b, 120, 120, 120)) fila.push(15);
 
-            // 🌿 Decorativos
+            // Decorativos
             else if (colorCercano(r, g, b, 0, 255, 0)) fila.push(16);
             else if (colorCercano(r, g, b, 255, 145, 102)) fila.push(17);
             else if (colorCercano(r, g, b, 189, 72, 130)) fila.push(18);
