@@ -58,6 +58,8 @@ recursos.cargarImagen("tierra10", "./imgs/tierra/tierra10.png");
 recursos.cargarImagen("tierra11", "./imgs/tierra/tierra11.png");
 recursos.cargarImagen("tierra12", "./imgs/tierra/tierra12.png");
 
+recursos.cargarImagen("tabla", "./imgs/tablas/tabla.png");
+
 recursos.cargarImagen("arbusto", "./imgs/arbusto/arbusto.png");
 
 recursos.cargarImagen("islas_flotantes", "./fondos/islas_flotantes.png");
