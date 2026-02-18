@@ -74,7 +74,7 @@ export class EscenaNivel extends Escena {
           });
         } else if (deco[yd][xd] === 19) {
           this.mundo.decorativos.push({
-            x: xd * 100, y: yd * 100 + 50, ancho: 104, alto: 50,
+            x: xd * 100 - 1, y: yd * 100 + 50, ancho: 104, alto: 50,
             imagen: this.recursos.obtenerImagen("cerca")
           });
         }
