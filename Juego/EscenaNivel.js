@@ -118,6 +118,11 @@ export class EscenaNivel extends Escena {
     this.botones.forEach(btn => {
       this.ctxUI.fillStyle = btn.color;
       this.ctxUI.fillRect(btn.x, btn.y, btn.w, btn.h);
+      if (btn.id === "btn_fs") {
+        this.ctxUI.strokeStyle = "white";
+        this.ctxUI.lineWidth = 2;
+        this.ctxUI.strokeRect(btn.x + 20, btn.y + 15, btn.w - 40, btn.h - 30);
+      }
     });
     this.ctxUI.fillStyle = "yellow";
     this.ctxUI.font = "bold 24px Arial";
@@ -130,12 +135,15 @@ export class EscenaNivel extends Escena {
       e.preventDefault();
       const rect = canvasUI.getBoundingClientRect();
       let tactilIzq = false, tactilDer = false, tactilSalto = false, tactilDash = false;
+      
       for (let i = 0; i < e.touches.length; i++) {
         const touch = e.touches[i];
         const tx = (touch.clientX - rect.left) * (canvasUI.width / rect.width);
         const ty = (touch.clientY - rect.top) * (canvasUI.height / rect.height);
+        
         this.botones.forEach(btn => {
           if (tx > btn.x && tx < btn.x + btn.w && ty > btn.y && ty < btn.y + btn.h) {
+            if (btn.id === "btn_fs" && e.type === "touchstart") this.alternarPantallaCompleta();
             if (btn.id === "btn_izq") tactilIzq = true;
             if (btn.id === "btn_der") tactilDer = true;
             if (btn.id === "btn_salto") tactilSalto = true;
@@ -151,6 +159,15 @@ export class EscenaNivel extends Escena {
     canvasUI.addEventListener("touchstart", actualizarControles);
     canvasUI.addEventListener("touchmove", actualizarControles);
     canvasUI.addEventListener("touchend", actualizarControles);
+  }
+
+  alternarPantallaCompleta() {
+    const contenedor = document.getElementById("contenedor-juego");
+    if (!document.fullscreenElement) {
+      contenedor.requestFullscreen().catch(err => console.error(err.message));
+    } else {
+      document.exitFullscreen();
+    }
   }
 
   crearParticulaDash() {
