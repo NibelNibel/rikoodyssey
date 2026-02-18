@@ -55,7 +55,7 @@ export class EscenaNivel extends Escena {
         } else if (mapa[y][x] === 17) {
           const tabla = new Bloque(x * 100, y * 100);
           tabla.imagen = this.recursos.obtenerImagen("tabla");
-          this.mundo.agregar(bloque, false);
+          this.mundo.agregar(bloque, true);
         }
       }
     }
