@@ -41,7 +41,7 @@ export class EscenaNivel extends Escena {
     for (let y = 0; y < mapa.length; y++) {
       for (let x = 0; x < mapa[y].length; x++) {
         if (mapa[y][x] === 1 || (mapa[y][x] >= 4 && mapa[y][x] <= 15)) {
-          const bloque = new Bloque(x * 100, y * 100);
+          const bloque = new Bloque(x * 100 - 1, y * 100 - 1);
           const imgMap = {1:0, 4:1, 5:2, 6:3, 7:4, 8:5, 9:6, 10:7, 11:8, 12:9, 13:10, 14:11, 15:12};
           bloque.imagen = this.recursos.obtenerImagen(`tierra${imgMap[mapa[y][x]]}`);
           this.mundo.agregar(bloque, true);
@@ -53,7 +53,7 @@ export class EscenaNivel extends Escena {
           const moneda = new Moneda(x * 100 + 2, y * 100 + 2, this.recursos, new animador(0.5, 1));
           this.mundo.agregar(moneda, false);
         } else if (mapa[y][x] === 17) {
-          const tabla = new Bloque(x * 100, y * 100);
+          const tabla = new Bloque(x * 100 - 1, y * 100 - 1);
           tabla.imagen = this.recursos.obtenerImagen("tabla");
           this.mundo.agregar(tabla, true);
         }
