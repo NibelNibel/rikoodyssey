@@ -50,12 +50,12 @@ export class Mundo {
     const ctxOriginal = renderizador.contexto;
     renderizador.contexto = this.mapaCtx;
 
-    for (const o of this.decorativos) {
-      renderizador.dibujarImagen(o.imagen, o.x, o.y, o.ancho, o.alto);
-    }
-
     for (const o of this.solidos) {
       o.dibujar(renderizador);
+    }
+    
+    for (const o of this.decorativos) {
+      renderizador.dibujarImagen(o.imagen, o.x, o.y, o.ancho, o.alto);
     }
 
     renderizador.contexto = ctxOriginal;
