@@ -72,6 +72,11 @@ export class EscenaNivel extends Escena {
             x: xd * 100 + 33, y: yd * 100 + 50, ancho: 34, alto: 50,
             imagen: this.recursos.obtenerImagen("flor")
           });
+        } else if (deco[yd][xd] === 19) {
+          this.mundo.decorativos.push({
+            x: xd * 100 + 33, y: yd * 100 + 50, ancho: 34, alto: 50,
+            imagen: this.recursos.obtenerImagen("cerca")
+          });
         }
       }
     }
