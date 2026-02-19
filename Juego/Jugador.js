@@ -262,51 +262,43 @@ export class Jugador extends Entidad {
   }
 
   dibujar(renderizador) {
+    if (!this.imagen || !this.imagen.complete) return;
 
-  const frame = this.animador.frame;
+    if (this.hitbox) {
+      renderizador.rectangulo(
+        Math.floor(this.x),
+        Math.floor(this.y),
+        this.ancho,
+        this.alto,
+        "#00ff00"
+      );
+    }
 
-  this.imagen = this.recursos.obtenerImagen(
-    `riko_${this.estado}_${this.direccion}${frame}`
-  );
+    const drawX = Math.floor(this.x);
+    const drawY = Math.floor(this.y);
+    const frame = this.animador.frame;
 
-  if (!this.imagen || !this.imagen.complete) return;
-
-  const spriteW = 200;
-  const spriteH = 200;
-
-  // Posición centrada respecto a la hitbox
-  const drawX = this.x + this.ancho / 2 - spriteW / 2;
-  const drawY = this.y + this.alto - spriteH;
-
-  // Dibujar hitbox si está activado
-  if (this.hitbox) {
-    renderizador.rectangulo(
-      this.x,
-      this.y,
-      this.ancho,
-      this.alto,
-      "#00ff00"
+    this.imagen = this.recursos.obtenerImagen(
+      `riko_${this.estado}_${this.direccion}${frame}`
     );
-  }
 
-  // Dibujar sprite principal
-  renderizador.dibujarImagen(
-    this.imagen,
-    drawX,
-    drawY,
-    spriteW,
-    spriteH
-  );
-
-  // Dibujar partículas
-  for (let p of this.particulas) {
-    renderizador.rectangulo(
-      p.x - p.tam / 2,
-      p.y - p.tam / 2,
-      p.tam,
-      p.tam,
-      p.color
+    renderizador.dibujarImagen(
+      this.imagen,
+      drawX - 70,
+      drawY - 4,
+      200,
+      200
     );
+
+  
+    for (let p of this.particulas) {
+      renderizador.rectangulo(
+        Math.floor(p.x - p.tam / 2),
+        Math.floor(p.y - p.tam / 2),
+        p.tam,
+        p.tam,
+        p.color
+      );
+    }
   }
-}
 }
