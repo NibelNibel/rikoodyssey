@@ -41,20 +41,18 @@ export class Jugador extends Entidad {
     this.distanciaCaida = 0;
     this.umbralCaida = 201;
 
-
     this.tiempoGolpe = 0;
     this.duracionGolpe = 0.3;
 
     this.Audios = [];
     this.AudiosNombres = ["yei", "dolor"];
+
     for (let i = 0; i < this.AudiosNombres.length; i++) {
       let audio = new Audio(`./audios/riko/${this.AudiosNombres[i]}.wav`);
       audio.volume = 0.05;
       this.Audios.push(audio);
     }
-    console.log(this.Audios);
 
-    
     this.particulas = [];
   }
 
@@ -74,19 +72,21 @@ export class Jugador extends Entidad {
   }
 
   actualizar(dt, mundo, controles) {
+
     this.animador.actualizar(dt);
     const ahora = Date.now();
 
-  
     if (this.tiempoGolpe > 0) {
       this.tiempoGolpe -= dt;
     }
 
     let dirX = 0;
+
     if (controles.izquierda) {
       dirX -= 1;
       this.direccion = "i";
     }
+
     if (controles.derecha) {
       dirX += 1;
       this.direccion = "d";
@@ -120,13 +120,17 @@ export class Jugador extends Entidad {
     }
 
     if (!this.estaDasheando) {
+
       if (dirX !== 0) {
+
         if (Math.sign(dirX) !== Math.sign(this.vx) && this.vx !== 0) {
           this.vx += dirX * this.deceleracionGiro * dt;
         } else {
           this.vx += dirX * this.aceleracion * dt;
         }
+
       } else {
+
         if (this.vx > 0)
           this.vx = Math.max(0, this.vx - this.friccion * dt);
         else if (this.vx < 0)
@@ -144,33 +148,29 @@ export class Jugador extends Entidad {
     const sdt = dt / this.substeps;
 
     for (let i = 0; i < this.substeps; i++) {
-      // --- EJE X ---
+
       const deltaX = this.vx * sdt;
       this.x += deltaX;
 
       const colX = mundo.colisionar(this, "x", deltaX);
 
-      if (colX) {
-        if (this.estaDasheando) {
-          this.Audios[0].pause();
-          this.Audios[0].currentTime = 0;
-          this.Audios[1].currentTime = 0;
-          this.Audios[1].play();
-          this.estado = "golpe_cabeza";
-          this.tiempoGolpe = this.duracionGolpe;
-          this.vx *= -0.4;
-          this.estaDasheando = false;
-        } else {
-          this.vx = 0;
-        }
+      if (colX && this.estaDasheando) {
+        this.Audios[0].pause();
+        this.Audios[0].currentTime = 0;
+        this.Audios[1].currentTime = 0;
+        this.Audios[1].play();
+        this.estado = "golpe_cabeza";
+        this.tiempoGolpe = this.duracionGolpe;
+        this.vx *= -0.4;
+        this.estaDasheando = false;
       }
 
-    
       const velocidadImpactoY = this.vy;
       const deltaY = this.vy * sdt;
       this.y += deltaY;
 
       const colY = mundo.colisionar(this, "y", deltaY);
+
       if (colY) {
         if (velocidadImpactoY < this.velocidadMinimaGolpe) {
           this.Audios[0].pause();
@@ -180,57 +180,48 @@ export class Jugador extends Entidad {
           this.estado = "golpe_cabeza";
           this.tiempoGolpe = this.duracionGolpe;
         }
-        this.vy = 0;
       }
     }
 
-  
+    // Verificar suelo
     this.y += 1;
     this.enSuelo = mundo.colisionar(this, "y", 1) !== null;
     this.y -= 1;
+
     if (this.enSuelo) {
       this.distanciaCaida = 0;
     } else if (this.vy > 0) {
       this.distanciaCaida += this.vy * dt;
     }
 
-  
     if (this.tiempoGolpe <= 0) {
-  
+
       if (controles.salto && this.enSuelo) {
         this.vy = this.fuerzaSalto;
-        console.log(this.vy);
         this.enSuelo = false;
         this.estado = "saltando";
         this.generarPolvoSalto();
       }
-      
+
       if (this.x < 0){
         this.x = 0;
         this.vx = 0;
       }
+
       if (this.x > this.limiteX - this.ancho){
         this.x = this.limiteX - this.ancho;
         this.vx = 0;
       }
-  
+
       if (this.enSuelo) {
         this.tiempoCayendo = 0;
-
-        if (this.vx === 0) {
-          this.estado = "quieta";
-        } else {
-          this.estado = "correr";
-        }
+        this.estado = this.vx === 0 ? "quieta" : "correr";
       }
-      // Estados en aire
       else {
         if (this.vy < 0) {
-          // Subiendo
           this.estado = "saltando";
           this.tiempoCayendo = 0;
         } else {
-          // Bajando
           if (this.distanciaCaida > this.umbralCaida) {
             this.estado = "saltando";
           }
@@ -238,18 +229,21 @@ export class Jugador extends Entidad {
             this.estado = "cayendo";
           }
         }
+
         if (this.estaDasheando) {
           this.estado = "saltando_alegre";
         }
       }
     }
 
+    // Partículas
     for (let i = this.particulas.length - 1; i >= 0; i--) {
       const p = this.particulas[i];
       p.x += p.vx * dt;
       p.y += p.vy * dt;
       p.vy += 200 * dt;
       p.vida -= dt;
+
       if (p.vida <= 0) {
         this.particulas.splice(i, 1);
       }
@@ -262,39 +256,43 @@ export class Jugador extends Entidad {
   }
 
   dibujar(renderizador) {
-    if (!this.imagen || !this.imagen.complete) return;
 
-    if (this.hitbox) {
-      renderizador.rectangulo(
-        this.x,
-        Math.floor(this.y),
-        this.ancho,
-        this.alto,
-        "#00ff00"
-      );
-    }
-
-    const drawX = Math.floor(this.x);
-    const drawY = Math.floor(this.y);
     const frame = this.animador.frame;
 
     this.imagen = this.recursos.obtenerImagen(
       `riko_${this.estado}_${this.direccion}${frame}`
     );
 
+    if (!this.imagen || !this.imagen.complete) return;
+
+    const spriteW = 200;
+    const spriteH = 200;
+
+    const drawX = this.x + this.ancho / 2 - spriteW / 2;
+    const drawY = this.y + this.alto - spriteH;
+
+    if (this.hitbox) {
+      renderizador.rectangulo(
+        this.x,
+        this.y,
+        this.ancho,
+        this.alto,
+        "#00ff00"
+      );
+    }
+
     renderizador.dibujarImagen(
       this.imagen,
-      drawX - 70,
-      drawY - 4,
-      200,
-      200
+      drawX,
+      drawY,
+      spriteW,
+      spriteH
     );
 
-  
     for (let p of this.particulas) {
       renderizador.rectangulo(
-        Math.floor(p.x - p.tam / 2),
-        Math.floor(p.y - p.tam / 2),
+        p.x - p.tam / 2,
+        p.y - p.tam / 2,
         p.tam,
         p.tam,
         p.color
