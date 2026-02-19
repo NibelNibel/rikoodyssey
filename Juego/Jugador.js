@@ -186,8 +186,8 @@ export class Jugador extends Entidad {
 
   
     this.y += 1;
-    this.enSuelo = mundo.colisionar(this, "y", 1) !== null;
-    this.y -= 1;
+this.enSuelo = mundo.colisionDetectar(this) !== null;
+this.y -= 1;
     if (this.enSuelo) {
       this.distanciaCaida = 0;
     } else if (this.vy > 0) {
