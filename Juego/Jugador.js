@@ -284,8 +284,8 @@ export class Jugador extends Entidad {
 
     renderizador.dibujarImagen(
       this.imagen,
-      drawX - 70,
-      drawY - 4,
+      Math.floor(drawX - 70),
+      Math.floor(drawY - 4),
       200,
       200
     );
