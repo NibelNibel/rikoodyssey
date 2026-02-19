@@ -116,7 +116,35 @@ export class Mundo {
       }
     }
     return null;
+  } 
+  
+  colisionDetectar(entidad) {
+  const a = this.obtenerCelda(entidad.x, entidad.y);
+  const b = this.obtenerCelda(entidad.x + entidad.ancho, entidad.y + entidad.alto);
+
+  const candidatos = new Set();
+
+  for (let f = a.f; f <= b.f; f++) {
+    for (let c = a.c; c <= b.c; c++) {
+      this.cuadricula[f][c].forEach(o => candidatos.add(o));
+    }
   }
+
+  for (const o of candidatos) {
+    if (!o.solido) continue;
+
+    if (
+      entidad.x < o.x + o.ancho &&
+      entidad.x + entidad.ancho > o.x &&
+      entidad.y < o.y + o.alto &&
+      entidad.y + entidad.alto > o.y
+    ) {
+      return o;
+    }
+  }
+
+  return null;
+}
 
   dibujar(renderizador, camara) {
     if (this.mapaRenderizado) {
