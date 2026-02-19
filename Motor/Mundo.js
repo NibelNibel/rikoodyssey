@@ -34,8 +34,10 @@ export class Mundo {
 
   agregar(objeto, solido = false) {
     (solido ? this.solidos : this.otros).push(objeto);
+
     const a = this.obtenerCelda(objeto.x, objeto.y);
     const b = this.obtenerCelda(objeto.x + objeto.ancho, objeto.y + objeto.alto);
+
     for (let f = a.f; f <= b.f; f++) {
       for (let c = a.c; c <= b.c; c++) {
         this.cuadricula[f][c].push(objeto);
@@ -91,30 +93,51 @@ export class Mundo {
   colisionar(entidad, eje, delta) {
     const a = this.obtenerCelda(entidad.x, entidad.y);
     const b = this.obtenerCelda(entidad.x + entidad.ancho, entidad.y + entidad.alto);
+
     const candidatos = new Set();
+
     for (let f = a.f; f <= b.f; f++) {
       for (let c = a.c; c <= b.c; c++) {
         this.cuadricula[f][c].forEach(o => candidatos.add(o));
       }
     }
+
     for (const o of candidatos) {
       if (!o.solido) continue;
+
       if (
         entidad.x < o.x + o.ancho &&
         entidad.x + entidad.ancho > o.x &&
         entidad.y < o.y + o.alto &&
         entidad.y + entidad.alto > o.y
       ) {
+
         if (eje === "x") {
-          entidad.x -= delta;
+
+          if (delta > 0) {
+            entidad.x = o.x - entidad.ancho;
+          } else if (delta < 0) {
+            entidad.x = o.x + o.ancho;
+          }
+
+          entidad.vx = 0;
+
         } else {
-          entidad.y -= delta;
-          if (delta > 0) entidad.enSuelo = true;
+
+          if (delta > 0) {
+            entidad.y = o.y - entidad.alto;
+            entidad.enSuelo = true;
+          } else if (delta < 0) {
+            entidad.y = o.y + o.alto;
+          }
+
           entidad.vy = 0;
         }
+
         return o;
       }
     }
+
     return null;
   }
 
