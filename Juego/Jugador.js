@@ -262,7 +262,6 @@ export class Jugador extends Entidad {
   }
 
   dibujar(renderizador) {
-    if (!this.imagen || !this.imagen.complete) return;
 
     if (this.hitbox) {
       renderizador.rectangulo(
@@ -281,6 +280,7 @@ export class Jugador extends Entidad {
     this.imagen = this.recursos.obtenerImagen(
       `riko_${this.estado}_${this.direccion}${frame}`
     );
+    if (!this.imagen || !this.imagen.complete) return;
 
     renderizador.dibujarImagen(
       this.imagen,
