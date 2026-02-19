@@ -266,7 +266,7 @@ export class Jugador extends Entidad {
 
     if (this.hitbox) {
       renderizador.rectangulo(
-        Math.floor(this.x),
+        this.x,
         Math.floor(this.y),
         this.ancho,
         this.alto,
