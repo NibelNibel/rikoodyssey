@@ -139,7 +139,7 @@ export class Jugador extends Entidad {
     this.vy += this.gravedad * dt;
   }
 
-  // 🔥 SUBSTEPS PROFESIONALES
+  // SUBSTEPS PROFESIONALES
   const totalMoveX = this.vx * dt;
   const totalMoveY = this.vy * dt;
 
