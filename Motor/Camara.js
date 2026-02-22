@@ -29,7 +29,7 @@ export class Camara {
   this.x = Math.max(0, Math.min(this.x, mundo.ancho - this.ancho));
   this.y = Math.max(0, Math.min(this.y, mundo.alto - this.alto));
 
-  //this.x = Math.round(this.x);
-  //this.y = Math.round(this.y);
+  this.x = Math.round(this.x);
+  this.y = Math.round(this.y);
 }
 }
