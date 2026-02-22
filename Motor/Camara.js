@@ -8,7 +8,7 @@ export class Camara {
     this.objetivo = null;
     this.desfaseX = 0;
     this.desfaseY = 0;
-    this.interpolacion = 1;
+    this.interpolacion = 0.9;
   }
 
   seguir(entidad, desfaseX = 0, desfaseY = 0) {
