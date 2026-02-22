@@ -74,192 +74,198 @@ export class Jugador extends Entidad {
   }
 
   actualizar(dt, mundo, controles) {
-    this.animador.actualizar(dt);
-    const ahora = Date.now();
+  this.animador.actualizar(dt);
+  const ahora = Date.now();
 
-  
-    if (this.tiempoGolpe > 0) {
-      this.tiempoGolpe -= dt;
-    }
+  if (this.tiempoGolpe > 0) {
+    this.tiempoGolpe -= dt;
+  }
 
-    let dirX = 0;
-    if (controles.izquierda) {
-      dirX -= 1;
-      this.direccion = "i";
-    }
-    if (controles.derecha) {
-      dirX += 1;
-      this.direccion = "d";
-    }
+  let dirX = 0;
+  if (controles.izquierda) {
+    dirX -= 1;
+    this.direccion = "i";
+  }
+  if (controles.derecha) {
+    dirX += 1;
+    this.direccion = "d";
+  }
 
-    const estaCorriendoAlMaximo = Math.abs(this.vx) >= this.velocidadMax - 10;
+  const estaCorriendoAlMaximo = Math.abs(this.vx) >= this.velocidadMax - 10;
 
-    if (
-      controles.dash &&
-      ahora - this.ultimoDash > this.cooldownDash &&
-      estaCorriendoAlMaximo
-    ) {
-      const direccionDash = Math.sign(this.vx);
+  // DASH
+  if (
+    controles.dash &&
+    ahora - this.ultimoDash > this.cooldownDash &&
+    estaCorriendoAlMaximo
+  ) {
+    const direccionDash = Math.sign(this.vx);
 
-      if (direccionDash !== 0 && this.tiempoGolpe <= 0) {
-        this.vx = direccionDash * this.potenciaDash;
-        this.vy = 0;
-        this.ultimoDash = ahora;
-        this.estaDasheando = true;
-        this.timerDash = this.duracionDash;
-        this.inicioDash = true;
-        this.Audios[0].play();
-      }
-    }
-
-    if (this.estaDasheando) {
-      this.timerDash -= dt;
-      if (this.timerDash <= 0) {
-        this.estaDasheando = false;
-      }
-    }
-
-    if (!this.estaDasheando) {
-      if (dirX !== 0) {
-        if (Math.sign(dirX) !== Math.sign(this.vx) && this.vx !== 0) {
-          this.vx += dirX * this.deceleracionGiro * dt;
-        } else {
-          this.vx += dirX * this.aceleracion * dt;
-        }
-      } else {
-        if (this.vx > 0)
-          this.vx = Math.max(0, this.vx - this.friccion * dt);
-        else if (this.vx < 0)
-          this.vx = Math.min(0, this.vx + this.friccion * dt);
-      }
-
-      this.vx = Math.max(
-        -this.velocidadMax,
-        Math.min(this.velocidadMax, this.vx)
-      );
-
-      this.vy += this.gravedad * dt;
-    }
-
-    const sdt = dt / this.substeps;
-
-    for (let i = 0; i < this.substeps; i++) {
-      // --- EJE X ---
-      const deltaX = this.vx * sdt;
-      this.x += deltaX;
-
-      const colX = mundo.colisionar(this, "x", deltaX);
-
-      if (colX) {
-        if (this.estaDasheando) {
-          this.Audios[0].pause();
-          this.Audios[0].currentTime = 0;
-          this.Audios[1].currentTime = 0;
-          this.Audios[1].play();
-          this.estado = "golpe_cabeza";
-          this.tiempoGolpe = this.duracionGolpe;
-          this.vx *= -0.4;
-          this.estaDasheando = false;
-        } else {
-          this.vx = 0;
-        }
-      }
-
-    
-      const velocidadImpactoY = this.vy;
-      const deltaY = this.vy * sdt;
-      this.y += deltaY;
-
-      const colY = mundo.colisionar(this, "y", deltaY);
-      if (colY) {
-        if (velocidadImpactoY < this.velocidadMinimaGolpe) {
-          this.Audios[0].pause();
-          this.Audios[0].currentTime = 0;
-          this.Audios[1].currentTime = 0;
-          this.Audios[1].play();
-          this.estado = "golpe_cabeza";
-          this.tiempoGolpe = this.duracionGolpe;
-        }
-        this.vy = 0;
-      }
-    }
-
-  
-    this.y += 1;
-    this.enSuelo = mundo.colisionar(this, "y", 1) !== null;
-    this.y -= 1;
-    if (this.enSuelo) {
-      this.distanciaCaida = 0;
-    } else if (this.vy > 0) {
-      this.distanciaCaida += this.vy * dt;
-    }
-
-  
-    if (this.tiempoGolpe <= 0) {
-  
-      if (controles.salto && this.enSuelo) {
-        this.vy = this.fuerzaSalto;
-        console.log(this.vy);
-        this.enSuelo = false;
-        this.estado = "saltando";
-        this.generarPolvoSalto();
-      }
-      
-      if (this.x < 0){
-        this.x = 0;
-        this.vx = 0;
-      }
-      if (this.x > this.limiteX - this.ancho){
-        this.x = this.limiteX - this.ancho;
-        this.vx = 0;
-      }
-  
-      if (this.enSuelo) {
-        this.tiempoCayendo = 0;
-
-        if (this.vx === 0) {
-          this.estado = "quieta";
-        } else {
-          this.estado = "correr";
-        }
-      }
-      // Estados en aire
-      else {
-        if (this.vy < 0) {
-          // Subiendo
-          this.estado = "saltando";
-          this.tiempoCayendo = 0;
-        } else {
-          // Bajando
-          if (this.distanciaCaida > this.umbralCaida) {
-            this.estado = "saltando";
-          }
-          if (this.distanciaCaida > this.umbralCaida + 300) {
-            this.estado = "cayendo";
-          }
-        }
-        if (this.estaDasheando) {
-          this.estado = "saltando_alegre";
-        }
-      }
-    }
-
-    for (let i = this.particulas.length - 1; i >= 0; i--) {
-      const p = this.particulas[i];
-      p.x += p.vx * dt;
-      p.y += p.vy * dt;
-      p.vy += 200 * dt;
-      p.vida -= dt;
-      if (p.vida <= 0) {
-        this.particulas.splice(i, 1);
-      }
-    }
-
-    if (this.y > this.limiteY){
-      this.x = 100;
-      this.y = 100;
+    if (direccionDash !== 0 && this.tiempoGolpe <= 0) {
+      this.vx = direccionDash * this.potenciaDash;
+      this.vy = 0;
+      this.ultimoDash = ahora;
+      this.estaDasheando = true;
+      this.timerDash = this.duracionDash;
+      this.inicioDash = true;
+      this.Audios[0].play();
     }
   }
+
+  if (this.estaDasheando) {
+    this.timerDash -= dt;
+    if (this.timerDash <= 0) {
+      this.estaDasheando = false;
+    }
+  }
+
+  // Movimiento horizontal
+  if (!this.estaDasheando) {
+    if (dirX !== 0) {
+      if (Math.sign(dirX) !== Math.sign(this.vx) && this.vx !== 0) {
+        this.vx += dirX * this.deceleracionGiro * dt;
+      } else {
+        this.vx += dirX * this.aceleracion * dt;
+      }
+    } else {
+      if (this.vx > 0)
+        this.vx = Math.max(0, this.vx - this.friccion * dt);
+      else if (this.vx < 0)
+        this.vx = Math.min(0, this.vx + this.friccion * dt);
+    }
+
+    this.vx = Math.max(
+      -this.velocidadMax,
+      Math.min(this.velocidadMax, this.vx)
+    );
+
+    this.vy += this.gravedad * dt;
+  }
+
+  const sdt = dt / this.substeps;
+  let colisionVerticalAbajo = false;
+
+  for (let i = 0; i < this.substeps; i++) {
+
+    // ---- EJE X ----
+    const deltaX = this.vx * sdt;
+    this.x += deltaX;
+
+    const colX = mundo.colisionar(this, "x", deltaX);
+
+    if (colX) {
+      if (this.estaDasheando) {
+        this.Audios[0].pause();
+        this.Audios[0].currentTime = 0;
+        this.Audios[1].currentTime = 0;
+        this.Audios[1].play();
+        this.estado = "golpe_cabeza";
+        this.tiempoGolpe = this.duracionGolpe;
+        this.vx *= -0.4;
+        this.estaDasheando = false;
+      } else {
+        this.vx = 0;
+      }
+    }
+
+    // ---- EJE Y ----
+    const velocidadImpactoY = this.vy;
+    const deltaY = this.vy * sdt;
+    this.y += deltaY;
+
+    const colY = mundo.colisionar(this, "y", deltaY);
+
+    if (colY) {
+
+      // Detectar si cayó sobre el suelo
+      if (velocidadImpactoY > 0) {
+        colisionVerticalAbajo = true;
+      }
+
+      // Golpe fuerte hacia arriba
+      if (velocidadImpactoY < this.velocidadMinimaGolpe) {
+        this.Audios[0].pause();
+        this.Audios[0].currentTime = 0;
+        this.Audios[1].currentTime = 0;
+        this.Audios[1].play();
+        this.estado = "golpe_cabeza";
+        this.tiempoGolpe = this.duracionGolpe;
+      }
+
+      this.vy = 0;
+    }
+  }
+
+  // 🔥 ESTA ES LA PARTE PROFESIONAL
+  this.enSuelo = colisionVerticalAbajo;
+
+  // Reset caída
+  if (this.enSuelo) {
+    this.distanciaCaida = 0;
+  } else if (this.vy > 0) {
+    this.distanciaCaida += this.vy * dt;
+  }
+
+  // ---- Lógica de salto y estados ----
+  if (this.tiempoGolpe <= 0) {
+
+    if (controles.salto && this.enSuelo) {
+      this.vy = this.fuerzaSalto;
+      this.enSuelo = false;
+      this.estado = "saltando";
+      this.generarPolvoSalto();
+    }
+
+    if (this.x < 0) {
+      this.x = 0;
+      this.vx = 0;
+    }
+
+    if (this.x > this.limiteX - this.ancho) {
+      this.x = this.limiteX - this.ancho;
+      this.vx = 0;
+    }
+
+    if (this.enSuelo) {
+      if (this.vx === 0) {
+        this.estado = "quieta";
+      } else {
+        this.estado = "correr";
+      }
+    } else {
+      if (this.vy < 0) {
+        this.estado = "saltando";
+      } else {
+        if (this.distanciaCaida > this.umbralCaida + 300) {
+          this.estado = "cayendo";
+        } else {
+          this.estado = "saltando";
+        }
+      }
+
+      if (this.estaDasheando) {
+        this.estado = "saltando_alegre";
+      }
+    }
+  }
+
+  // Partículas
+  for (let i = this.particulas.length - 1; i >= 0; i--) {
+    const p = this.particulas[i];
+    p.x += p.vx * dt;
+    p.y += p.vy * dt;
+    p.vy += 200 * dt;
+    p.vida -= dt;
+    if (p.vida <= 0) {
+      this.particulas.splice(i, 1);
+    }
+  }
+
+  if (this.y > this.limiteY) {
+    this.x = 100;
+    this.y = 100;
+  }
+}
 
   dibujar(renderizador) {
     if (!this.imagen || !this.imagen.complete) return;
