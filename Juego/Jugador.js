@@ -196,7 +196,6 @@ export class Jugador extends Entidad {
     }
   }
 
-  // 🔥 ESTA ES LA PARTE PROFESIONAL
   this.enSuelo = colisionVerticalAbajo;
 
   // Reset caída
